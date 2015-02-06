@@ -1,0 +1,14 @@
+\contentsline {section}{\numberline {1}Problem Restatement}{1}{section.1}
+\contentsline {section}{\numberline {2}Assumptions and Assumption Justifications}{1}{section.2}
+\contentsline {section}{\numberline {3}Literature Review}{2}{section.3}
+\contentsline {section}{\numberline {4}Criteria for Optimal Solution}{2}{section.4}
+\contentsline {section}{\numberline {5}Describe Your Method}{2}{section.5}
+\contentsline {subsection}{\numberline {5.1}Description}{2}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Mathematical Interpretation}{2}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Comparison to Most Interesting Literature Paper}{2}{subsection.5.3}
+\contentsline {section}{\numberline {6}Comparison to a Greedy Algorithm}{2}{section.6}
+\contentsline {section}{\numberline {7}Experimental Setup}{2}{section.7}
+\contentsline {section}{\numberline {8}Results}{2}{section.8}
+\contentsline {section}{\numberline {9}Sensitivity to Parameters}{2}{section.9}
+\contentsline {section}{\numberline {10}Strengths and Weaknesses}{2}{section.10}
+\contentsline {section}{\numberline {11}Conclusion}{3}{section.11}
