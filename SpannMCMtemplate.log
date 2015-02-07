@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.5-0.9999.3 (MiKTeX 2.9) (preloaded format=xelatex 2014.12.11)  6 FEB 2015 23:30
+This is XeTeX, Version 3.1415926-2.5-0.9999.3 (MiKTeX 2.9) (preloaded format=xelatex 2014.12.11)  7 FEB 2015 06:53
 entering extended mode
 **SpannMCMtemplate.tex
 (C:\Users\fl3537\Desktop\MCM\SpannMCMtemplate.tex
@@ -467,9 +467,10 @@ File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 215.
+ [1]
 Requested font "cmr12" at 14.4pt
 Requested font "cmbx12" at 14.4pt
- [1] [2]
+ [2]
 
 LaTeX Warning: Empty `thebibliography' environment on input line 449.
 
@@ -486,7 +487,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 470.
 Here is how much of TeX's memory you used:
  9676 strings out of 429025
  130746 string characters out of 3166797
- 202521 words of memory out of 3000000
+ 201521 words of memory out of 3000000
  12872 multiletter control sequences out of 15000+200000
  10828 words of font info for 42 fonts, out of 3000000 for 9000
  912 hyphenation exceptions out of 8191

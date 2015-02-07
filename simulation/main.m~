@@ -32,15 +32,15 @@ Fr = .5;
 % communication interval/distance
 interval = 15*60; %s
 rint = AC.Vc*interval; %m
-% probability resolution (m)
-drtil = 1e2;
+% probability resolution
+Nrtil = 1e1; %m
 % grid resolution
 N1grid = 30;
 N2grid = 20;
 % boundary distance [-x1 +x1 -x2 +x2]
-bdry = [-100 300 -150 150]*1e3; %m
-% none-deflection probability
-q = 1/pi;
+bdry = [-150 350 -150 150]*1e3; %m
+% reverse probability
+s = .05; q = 1/pi-2*s; 
 
 %% incident to crash range pdf
 
@@ -50,7 +50,7 @@ Ncrash = [972, 548, 1226, 822, 109 + 1057];
 Rcrash = [150, 50, 60, 30, Range]*1e3; %m
 
 % stdev of the statistics (guess)
-Rstdev = [.2 .2 .2 .2 .1];
+Rstdev = [.3 .2 .2 .2 .2];
 
 Rprofile = [];
 for i=1:numel(Ncrash)
@@ -59,43 +59,55 @@ for i=1:numel(Ncrash)
 end
 
 % visuialization
-% figure(); hist(Rprofile,100)
+hist(Rprofile)
+% [a,b]=ksdensity(Rprofile(Rprofile<500e3));
+% plot(b,a)
 
 %% continuous probability at x (vector)
-% rtil = 0:drtil:rint;
-% Nrtil = numel(rtil);
+rtil = linspace(0,rint,Nrtil);
 % Rtil = @(x) norm(repmat(x,1,Nrtil)-[rtil;zeros(1,Nrtil)]);
 % theta = @(x) abs(atan2(x(2),x(1)-rtil));
-% ptheta = @(x) q-theta(x)*q/pi;
-% % integral(pdf(Rtil)*pdf(rtil)*pdf(theta),0 to rint)
-% px = @(x) sum(ksdensity(Rprofile,Rtil(x))*ptheta(x)/rint)*drtil;
-% % px = @(x) sum(ksdensity(Rprofile,Rtil(x))/rint)*drtil;
+% ptheta = @(x) q+theta(x)*(s-q)/pi;
+% integrate pdf(Rtil)*pdf(rtil)*pdf(theta) from rtil=0 to rint
+% px = @(x) sum(ksdensity(Rprofile,Rtil(x),'function','pdf')*ptheta(x)/rint)*rint/Nrtil;
+
+
+% Rtil = @(rtil,x) norm([x(1)-rtil, repmat(x(2),1,numel(rtil))]);
+% theta = @(rtil,x) abs(atan2(x(2),x(1)-rtil));
+% ptheta = @(rtil,x) q+theta(rtil,x)*(s-q)/pi;
+% pdfx = @(rtil,x) ksdensity(Rprofile,Rtil(rtil,x))*ptheta(rtil,x);
 
 Rtil = @(rtil,x) norm(x-[rtil;0]);
 theta = @(rtil,x) abs(atan2(x(2),x(1)-rtil));
-ptheta = @(rtil,x) q-theta(rtil,x)*q/pi;
+ptheta = @(rtil,x) q+theta(rtil,x)*(s-q)/pi;
 pdfx = @(rtil,x) ksdensity(Rprofile,Rtil(rtil,x))*ptheta(rtil,x);
-px = @(x) glq1d(pdfx,3,x);
 %% discritized probability at cell (m,n)
 
 Agrid = (bdry(2)-bdry(1))*(bdry(4)-bdry(3));
 % grid pt construction
-x1grid = linspace(bdry(1),bdry(2),N1grid)/1e3;
-x2grid = linspace(bdry(3),bdry(4),N2grid)/1e3;
+x1grid = linspace(bdry(1),bdry(2),N1grid);
+x2grid = linspace(bdry(3),bdry(4),N2grid);
 [X,Y] = meshgrid(x1grid,x2grid);
 
-pxx = @(x1,x2) px([x1;x2]*1e3);
 P = zeros(size(X));
 for i = 1:numel(X)
-%     P(i) = pxx(X(i),Y(i));
-    
-    P(i) = glq2ds(px);
+    for ii = 1:Nrtil
+        P(i) = P(i) + pdfx(rtil(ii),[X(i);Y(i)])*rint/Nrtil;
+    end
 end
+P = P / sum(P(:)); % renormalization
 
+%% crash distribution graph
+
+S = Surface(N1grid,N2grid,bdry/1e3);
 figure(); hold all;
-surf(X,Y,P,'edgecolor','none','facecolor','interp'); view(2); colorbar
+plottwoform(S,P',3); colorbar;
+xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
+title('Probability of Aircraft Landed in Cell');
+hold all;
+plot3([0 rint]/1e3, [0 1], p,'*');
 
 
-
+%% drifting simulation
 
 
