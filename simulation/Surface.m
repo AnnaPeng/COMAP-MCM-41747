@@ -36,6 +36,7 @@ classdef Surface
                 case 3
                     n = varargin{1}; 
                     m = varargin{2};
+                    % boundary distance [-x1 +x1 -x2 +x2]
                     bdry = varargin{3};
                     [X,Y] = meshgrid(linspace(bdry(1),bdry(2),n+1),...
                                      linspace(bdry(3),bdry(4),m+1));
