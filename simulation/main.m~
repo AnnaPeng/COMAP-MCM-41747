@@ -121,22 +121,23 @@ set(traj,'linewidth',2,'markersize',15)
 saveas(gcf,[acname '_PriorDistribution.png']);
 
 %% drift/diffusion simulation
-Nsim = 100; %steps
+Tsim = 96*3600; %s
 
 PP = P;
 % update interval that is appropriate
 % i.e. allow only single cell diffusion given grid resolution
 if GRIDcase == 1
     dt = .5*60*60; %s
+    Nsim = Tsim/dt; %steps
 else
     dt = .1*60*60; %s
+    Nsim = Tsim/dt; %steps
 end
 % average debris drift speed
 dV = 10; %m/s
 % escape/out of range probability
 Pescape = 0;
 
-Tsim = Nsim*dt; %s
 % propogation loop
 for tstep = 1:Nsim
     [PP,temp] = driftTransition2(S,dt,dV,PP);
@@ -148,8 +149,13 @@ xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
 title(num2str(Tsim/3600, 'Probability of Aircraft Debris Location at t=%d hr'));
 saveas(gcf,[acname '_NoSearchDistribution.png']);
 
-%% Distributed Search Plan (edge first)
+%% Search Agent Data
 
+% Marine Vessel (Damen SAR vessel 1816/1906 range= 600km+)
+Vs = 15.5; %m/s
+
+
+%% Distributed Search Plan (edge first)
 
 
 % propogation loop

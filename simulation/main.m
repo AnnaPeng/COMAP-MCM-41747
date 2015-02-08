@@ -149,8 +149,15 @@ xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
 title(num2str(Tsim/3600, 'Probability of Aircraft Debris Location at t=%d hr'));
 saveas(gcf,[acname '_NoSearchDistribution.png']);
 
-%% Distributed Search Plan (edge first)
+%% Search Agent Data
 
+% Marine Vessel (Damen SAR vessel 1816/1906 range= 600km+)
+Vs = 15.5; %m/s
+Rdetect = 50; %m
+
+% UAV
+
+%% Distributed Search Plan (edge first)
 
 
 % propogation loop

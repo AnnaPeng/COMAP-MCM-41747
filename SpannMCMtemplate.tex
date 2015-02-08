@@ -248,7 +248,8 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \item \textbf{Search agents use either magnetometer or camera as their main detector.}
 \item \textbf{Search agents all have a lateral range function of a bivariate Gaussian as a function of their type, altitude, and speed.} Detection follows Koopman's Random search formula.
 \item \textbf{The probability of false alarm is assumed to be $0$\%.} Lack of exact literature references, industry standard assumption [2013 book]. 
-\textbf{The search agents have no knowledge of local drift direction.} Although modern planning softwares used by professional SAR entities (e.g. SARPOS by U.S. Coastal Guards) all have existing database to accommodate real-time ocean drifting, these data are often not precise, not to mention useless on a fictitious geography.
+\item \textbf{The search agents have no knowledge of local drift direction.} Although modern planning softwares used by professional SAR entities (e.g. SARPOS by U.S. Coastal Guards) all have existing database to accommodate real-time ocean drifting, these data are often not precise, not to mention useless on a fictitious geography.
+\item \textbf{Ignore refueling problems.} In operation, search agents can request refueling vehicles etc. and the time is not quite relevant.
 
 %%%Add more items as needed
 \end{itemize}
