@@ -47,10 +47,10 @@ rint = AC.Vc*interval; %m
 % continuous probability (rtil) riemann sum resolution
 Nrtil = 50;
 % grid resolution
-% N1grid = 100;
-% N2grid = 60;
-N1grid = 25;
-N2grid = 20;
+N1grid = 100;
+N2grid = 60;
+% N1grid = 25;
+% N2grid = 20;
 % # of 1D quadrature points (use even number for symm)
 Nquad = 2;
 % boundary distance [-x1 +x1 -x2 +x2]
@@ -60,8 +60,8 @@ s = .05; q = 1/pi-2*s;
 
 %% incident to crash range pdf
 
-AC.Rc = AC.Vc/gE/AC.SFC*AC.L2D*log(1+Fr*AC.Wfuel/AC.Wdry);
-AC.Tc = AC.Rc/AC.Vc;
+% AC.Rc = AC.Vc/gE/AC.SFC*AC.L2D*log(1+Fr*AC.Wfuel/AC.Wdry);
+% AC.Tc = AC.Rc/AC.Vc;
 % fire, collision, glide, other
 Ncrash = [1406, 1901, 901, 498];
 
@@ -74,7 +74,7 @@ for i=1:numel(Ncrash)
 end
 
 % smoothed profile + visuialization
-[PR,R]=ksdensity(Rhist,[0:1e3:50e3 53e3:3e3:300e3]);
+[PR,R]=ksdensity(Rhist,[0:1e3:50e3 55e3:5e3:300e3 310e3:10e3:500e3]);
 figure(); hold all; grid on;
 plot(R/1e3,PR,'rx--');
 xlim([0 300]); xlabel('Crash Radius [km]'); ylabel('Probability')
@@ -83,10 +83,10 @@ saveas(gcf,[acname '_CrashDistance.png']);
 
 %% continuous probability at x=(x1,x2)
 rtil = linspace(0,rint,Nrtil);
-Rtil = @(rtil,x) norm(x-[rtil;0]);
-theta = @(rtil,x) abs(atan2(x(2),x(1)-rtil));
-ptheta = @(rtil,x) q+theta(rtil,x)*(s-q)/pi;
-pdfx = @(rtil,x) interp1q(R,PR,Rtil(rtil,x))*ptheta(rtil,x);
+Rtil = @(x) sqrt(sum((repmat(x,1,Nrtil)-[rtil;zeros(size(rtil))]).^2));
+theta = @(x) abs(atan2(x(2),x(1)-rtil));
+ptheta = @(x) q + theta(x)*(s-q)/pi;
+pdfx = @(x) interp1(R,PR,Rtil(x)).*ptheta(x);
 %% discritized probability at cell (eu,ev)
 
 % pre-compute gauss-legendre points and weights
@@ -110,10 +110,7 @@ for ev=1:S.numelements(2)/2
             for k=1:Nquad
                 % pullback quadrature pts coordinate 
                 [x,y] = S.coords(eu,ev,Nu(:,k),Nv(:,l));
-                Ptemp = 0;
-                for i = 1:Nrtil
-                    Ptemp = Ptemp + pdfx(rtil(i),[x;y])*rint/Nrtil;
-                end
+                Ptemp = sum(pdfx([x;y]))*rint/Nrtil;
                 P(eu,ev) = P(eu,ev) + wu(k)*wv(l)*Ptemp;
             end
         end
@@ -172,12 +169,6 @@ for tstep = 1:100
     Pescape = Pescape*temp;
     plottwoform(SdriftP,PP,3);
 end
-
-%% add in (wind) random field disturbance
-
-% distribution
-
-
 %% lateral range curve/function
 
 % magnetometer (gaussian)

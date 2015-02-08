@@ -19,9 +19,9 @@ gE = 9.81; %m/s2
 % G280.Wfuel = 85E3 - G280.Wdry;
 % A380.Wfuel = 85E3 - A380.Wdry;
 % Cruise speed (m/s)
-B737.Vc = 217;
-G280.Vc = 217;
-A380.Vc = 217;
+B737.Vc = 243;
+G280.Vc = 250;
+A380.Vc = 262;
 % crash distance
 % fire, collision, glide, other
 A380.R = [24 50 160 80]*1e3; %m
@@ -60,8 +60,8 @@ s = .05; q = 1/pi-2*s;
 
 %% incident to crash range pdf
 
-AC.Rc = AC.Vc/gE/AC.SFC*AC.L2D*log(1+Fr*AC.Wfuel/AC.Wdry);
-AC.Tc = AC.Rc/AC.Vc;
+% AC.Rc = AC.Vc/gE/AC.SFC*AC.L2D*log(1+Fr*AC.Wfuel/AC.Wdry);
+% AC.Tc = AC.Rc/AC.Vc;
 % fire, collision, glide, other
 Ncrash = [1406, 1901, 901, 498];
 
@@ -79,14 +79,14 @@ figure(); hold all; grid on;
 plot(R/1e3,PR,'rx--');
 xlim([0 300]); xlabel('Crash Radius [km]'); ylabel('Probability')
 title(['Estimated Crash Distance for ' acname])
-saveas(gcf,'CrashDistance.png');
+saveas(gcf,[acname '_CrashDistance.png']);
 
 %% continuous probability at x=(x1,x2)
 rtil = linspace(0,rint,Nrtil);
-Rtil = @(rtil,x) norm(x-[rtil;0]);
-theta = @(rtil,x) abs(atan2(x(2),x(1)-rtil));
-ptheta = @(rtil,x) q+theta(rtil,x)*(s-q)/pi;
-pdfx = @(rtil,x) interp1q(R,PR,Rtil(rtil,x))*ptheta(rtil,x);
+Rtil = @(x) sqrt(sum((repmat(x,1,Nrtil)-[rtil;zeros(size(rtil))]).^2));
+theta = @(x) abs(atan2(x(2),x(1)-rtil));
+ptheta = @(x) q + theta(x)*(s-q)/pi;
+pdfx = @(x) interp1(R,PR,Rtil(x)).*ptheta(x);
 %% discritized probability at cell (eu,ev)
 
 % pre-compute gauss-legendre points and weights
@@ -110,10 +110,11 @@ for ev=1:S.numelements(2)/2
             for k=1:Nquad
                 % pullback quadrature pts coordinate 
                 [x,y] = S.coords(eu,ev,Nu(:,k),Nv(:,l));
-                Ptemp = 0;
-                for i = 1:Nrtil
-                    Ptemp = Ptemp + pdfx(rtil(i),[x;y])*rint/Nrtil;
-                end
+%                 Ptemp = 0;
+%                 for i = 1:Nrtil
+%                     Ptemp = Ptemp + pdfx(rtil(i),[x;y])*rint/Nrtil;
+%                 end
+                Ptemp = sum(pdfx([x;y]))*rint/Nrtil;
                 P(eu,ev) = P(eu,ev) + wu(k)*wv(l)*Ptemp;
             end
         end
@@ -135,7 +136,7 @@ title('Probability of Aircraft Landed in Cell');
 hold all;
 traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
 set(traj,'linewidth',2,'markersize',15)
-saveas(gcf,'prior.png');
+saveas(gcf,[acname 'PriorDistribution.png']);
 
 %% drift diffusion transition
 
