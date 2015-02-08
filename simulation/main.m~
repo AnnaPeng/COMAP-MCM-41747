@@ -151,10 +151,33 @@ saveas(gcf,[acname '_NoSearchDistribution.png']);
 
 %% Search Agent Data
 
+% given 99% detection range find sigma
+ncdf = @(sig,Rd) normcdf(Rd,0,sig)-normcdf(-Rd,0,sig);
+cdf2sig = @(Rd) fminsearch(@(sig) abs(ncdf(sig,Rd)-.99),Rd/2);
+
 % Marine Vessel (Damen SAR vessel 1816/1906 range= 600km+)
-Vs = 15.5; %m/s
+MV.Vs = 15.5; %m/s
+MV.Rdetect = 1e3; %m
+MV.FA = 0;
+MV.sig = cdf2sig(MV.Rdetect); %m
 
+% UAV (Hermes)
+UAV.Vs = 49; %m/s
+UAV.Rdetect = 5e3; %m
+UAV.alt = 5e3; %m
+UAV.FA = .05;
+UAV.sig = cdf2sig(UAV.Rdetect); %m
 
+% Helicoptor (USCG Dolphin MH65C range= 650km+)
+heli.Vs = 90; %m/s
+heli.Rdetect = 5e3; %m
+heli.alt = 5.5e3; %m
+heli.FA = .05;
+heli.sig = cdf2sig(heli.Rdetect); %m
+
+%% Detection Probability
+
+Pd = @(xs,sig) mvncdf(,xs,sig);
 %% Distributed Search Plan (edge first)
 
 
