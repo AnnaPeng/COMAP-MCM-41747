@@ -2,22 +2,22 @@ clc; clear; close all;
 % constants
 gE = 9.81; %m/s2
 %% plane specs (B737-900ER; G280; A380)
-% Specific Fuel Consumption (kg/N/s)
-B737.SFC = 20E-6;
-G280.SFC = 20E-6;
-A380.SFC = 20E-6;
-% Lift to Drag Ratio
-B737.L2D = 20;
-G280.L2D = 20;
-A380.L2D = 20;
-% Dry Weight = Operation Empty Weight + Total Payload (kg)
-B737.Wdry = 40E3+25E3;
-G280.Wdry = 40E3+25E3;
-A380.Wdry = 40E3+25E3;
-% Total fuel load = Maximum Take Off Weight - Dry Weight (kg)
-B737.Wfuel = 85E3 - B737.Wdry;
-G280.Wfuel = 85E3 - G280.Wdry;
-A380.Wfuel = 85E3 - A380.Wdry;
+% % Specific Fuel Consumption (kg/N/s)
+% B737.SFC = 20E-6;
+% G280.SFC = 20E-6;
+% A380.SFC = 20E-6;
+% % Lift to Drag Ratio
+% B737.L2D = 20;
+% G280.L2D = 20;
+% A380.L2D = 20;
+% % Dry Weight = Operation Empty Weight + Total Payload (kg)
+% B737.Wdry = 40E3+25E3;
+% G280.Wdry = 40E3+25E3;
+% A380.Wdry = 40E3+25E3;
+% % Total fuel load = Maximum Take Off Weight - Dry Weight (kg)
+% B737.Wfuel = 85E3 - B737.Wdry;
+% G280.Wfuel = 85E3 - G280.Wdry;
+% A380.Wfuel = 85E3 - A380.Wdry;
 % Cruise speed (m/s)
 B737.Vc = 217;
 G280.Vc = 217;
@@ -32,16 +32,20 @@ G280.R = [10 20 135 56]*1e3; %m
 
 % target aircraft make
 casenum = 1;
-if casenum == 1, AC = B737;
-elseif casenum == 2, AC = A380;
-else AC = G280; end
+if casenum == 1
+    AC = B737; acname = 'B737-900ER';
+elseif casenum == 2
+    AC = A380; acname = 'Airbus 380';
+else
+    AC = G280; acname = 'G280';
+end
 % remaining fuel ratio at incident
 Fr = .5;
 % communication interval/distance
 interval = 15*60; %s
 rint = AC.Vc*interval; %m
-% probability resolution
-Nrtil = 1e1; %m
+% continuous probability (rtil) riemann sum resolution
+Nrtil = 50;
 % grid resolution
 % N1grid = 100;
 % N2grid = 60;
@@ -64,23 +68,25 @@ Ncrash = [1406, 1901, 901, 498];
 % stdev of the statistics (guess)
 Rstdev = [.2 .2 .2 .2];
 
-Rprofile = [];
+Rhist = [];
 for i=1:numel(Ncrash)
-    Rprofile = [Rprofile;
-        randn(Ncrash(i),1)*Rstdev(i)*AC.R(i) + AC.R(i)];
+    Rhist = [Rhist; randn(Ncrash(i),1)*Rstdev(i)*AC.R(i) + AC.R(i)];
 end
 
-% visuialization
-figure();
-[a,b]=ksdensity(Rprofile);
-plot(b,a)
+% smoothed profile + visuialization
+[PR,R]=ksdensity(Rhist,[0:1e3:50e3 53e3:3e3:300e3]);
+figure(); hold all; grid on;
+plot(R/1e3,PR,'rx--');
+xlim([0 300]); xlabel('Crash Radius [km]'); ylabel('Probability')
+title(['Estimated Crash Distance for ' acname])
+saveas(gcf,[acname '_CrashDistance.png']);
 
 %% continuous probability at x=(x1,x2)
 rtil = linspace(0,rint,Nrtil);
 Rtil = @(rtil,x) norm(x-[rtil;0]);
 theta = @(rtil,x) abs(atan2(x(2),x(1)-rtil));
 ptheta = @(rtil,x) q+theta(rtil,x)*(s-q)/pi;
-pdfx = @(rtil,x) ksdensity(Rprofile,Rtil(rtil,x))*ptheta(rtil,x);
+pdfx = @(rtil,x) interp1q(R,PR,Rtil(rtil,x))*ptheta(rtil,x);
 %% discritized probability at cell (eu,ev)
 
 % pre-compute gauss-legendre points and weights
@@ -109,10 +115,10 @@ for ev=1:S.numelements(2)/2
                     Ptemp = Ptemp + pdfx(rtil(i),[x;y])*rint/Nrtil;
                 end
                 P(eu,ev) = P(eu,ev) + wu(k)*wv(l)*Ptemp;
-                P(eu,S.numelements(2)-ev+1) = P(eu,ev);
             end
         end
     end
+    P(:,S.numelements(2)-ev+1) = P(:,ev);
 end
 %% renormalize and save data
 P = P / sum(P(:));
@@ -129,7 +135,7 @@ title('Probability of Aircraft Landed in Cell');
 hold all;
 traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
 set(traj,'linewidth',2,'markersize',15)
-saveas(gcf,'prior.png');
+saveas(gcf,[acname 'PriorDistribution.png']);
 
 %% drift diffusion transition
 
