@@ -45,10 +45,8 @@ Nrtil = 1e1; %m
 % grid resolution
 N1grid = 100;
 N2grid = 60;
-% N1grid = 30;
-% N2grid = 20;
 % # of 1D quadrature points
-Nquad = 2;
+Nquad = 3;
 % boundary distance [-x1 +x1 -x2 +x2]
 bdry = [-150 350 -150 150]*1e3; %m
 % reverse probability
@@ -128,8 +126,16 @@ saveas(gcf,'prior.png');
 
 %% drift diffusion transition
 
-% Propogated P
-PP = P;
+% decimate P to 25x20 for this process
+N1drift = 25; N2drift = 20;
+PP = zeros(N1drift,N2drift);
+Sdrift = Surface(N1drift,N2drift,bdry);
+SdriftP = Surface(N1drift,N2drift,bdry/1e3);
+for i = 1:25
+    for j = 1:20
+        PP(i,j) = sum(sum(P(4*i-3+(0:3),3*j-2+(0:2))));
+    end
+end
 % update interval
 dt = .5*60*60; %s
 % average debris drift speed
@@ -138,17 +144,17 @@ dV = 10; %m/s
 Pescape = 0;
 
 figure(); hold all; grid on;
-traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
-plottwoform(Splot,PP,3); colorbar;
+% traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
+plottwoform(SdriftP,PP,3); colorbar;
 xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
 title('Probability of Aircraft Landed in Cell');
 hold all;
 set(traj,'linewidth',2,'markersize',15)
-for tstep = 1:10
-    pause(1)
-    [PP,temp] = driftTransition(S,dt,dV,PP);
+for tstep = 1:100
+    pause(.1);
+    [PP,temp] = driftTransition(Sdrift,dt,dV,PP);
     Pescape = Pescape*temp;
-    plottwoform(Splot,PP,3);
+    plottwoform(SdriftP,PP,3);
 end
 
 %% add in (wind) random field disturbance

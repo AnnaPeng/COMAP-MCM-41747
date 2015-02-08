@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.5-0.9999.3 (MiKTeX 2.9) (preloaded format=xelatex 2014.12.11)  8 FEB 2015 04:58
+This is XeTeX, Version 3.1415926-2.5-0.9999.3 (MiKTeX 2.9) (preloaded format=xelatex 2014.12.11)  8 FEB 2015 06:14
 entering extended mode
 **SpannMCMtemplate.tex
 (C:\Users\fl3537\Desktop\MCM\SpannMCMtemplate.tex
@@ -474,17 +474,17 @@ Requested font "cmr12" at 14.4pt
 Requested font "cmbx12" at 14.4pt
  [4] [5]
 
-LaTeX Warning: Empty `thebibliography' environment on input line 471.
+LaTeX Warning: Empty `thebibliography' environment on input line 472.
 
 
 AED: lastpage setting LastPage
 [6]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 492.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 492.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 493.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 493.
  (C:\Users\fl3537\Desktop\MCM\SpannMCMtemplate.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 492.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 492.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 492.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 493.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 493.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 493.
  ) 
 Here is how much of TeX's memory you used:
  9679 strings out of 429025
@@ -493,6 +493,6 @@ Here is how much of TeX's memory you used:
  12874 multiletter control sequences out of 15000+200000
  11187 words of font info for 43 fonts, out of 3000000 for 9000
  912 hyphenation exceptions out of 8191
- 29i,10n,45p,725b,399s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 29i,10n,45p,725b,397s stack positions out of 5000i,500n,10000p,200000b,50000s
 
 Output written on SpannMCMtemplate.pdf (8 pages).

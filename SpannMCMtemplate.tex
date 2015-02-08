@@ -212,10 +212,11 @@ Recall the lost Malaysian flight MH370. Build a generic mathematical model that 
 
 \textit{\textbf{About the Search Domain and the Missing Aircraft}}
 \begin{itemize}
-\item \textbf{The initial search domain is a $500$km by $300$km rectangle of unobstructed ocean.} This rectangle would cover the whole uncertainty range based on 
+\item \textbf{The search domain is a $500$km by $300$km rectangle of unobstructed ocean.} This rectangle would cover the whole uncertainty range based on 
 the last known state of the lost aircraft for an interval of 15 minutes to 1 hour based on INMARSAT's "Log-on Interrogation" old and newly recommended standards in light of the MH370 accident\textbf{[citation]}.
 \item \textbf{The missing aircraft is assumed to be still in this domain at $t=0$.} Although escaping the domain at a later time is allowed.
-\item \textbf{The crashed/force landed aircraft debris is assumed to be remain close to each other and floating at all time.} The assumption is that not enough time have passed for important targets (e.g. lifeboats) 
+\item \textbf{The SAR targets remain clustered.} This means that the targets always stay in the same $20$km by $15$km cell on the coarse grid. This assumption is valid as long as the search plan is initiated close to the incident and no serve weather condition causes disturbances.
+\item \textbf{There are buoyant indicator of target location at all time.} Since no underwater search is performed, we assume that either our SAR objective (e.g. survivors, life rafts, parts of crashed debris) remain buoyant throughout our search planning, or our sensor can detect signs of the objectives 
 \item \textbf{The local trajectory of concern is straight}. In addition to the obvious smoothness arguments, it is always possible to apply a conformal transform on the entire search domain to obtain a solution based on a curved trajectory.
 
 \item \textbf{No banking maneuver was made from incident to crash.} This is reasonable for that even in the worse case of gliding due to single engine failure, the average time from initial to of roughly $11$ minutes\textbf{[Citation or see derivation later]}. And this time is not long enough to cause trajectory deviations across different search cells.
