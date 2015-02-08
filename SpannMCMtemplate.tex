@@ -193,37 +193,46 @@ Recall the lost Malaysian flight MH370. Build a generic mathematical model that 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Uncomment if needed
-%\section{Terminology and Conventions}\label{sec:terms}
+\section{Terminologies and Conventions}\label{sec:terms}
 
-%\begin{itemize}
-%\item \textbf{Term1}. Definition.
+\begin{itemize}
+\item \textbf{SAR}. Search-And-Rescue.
 
-%\item \textbf{Term2}.  The problem statement uses the synonym `foo'.
+\item \textbf{MTOW}. Maximum Take Off Weight.
 
-%\item \textbf{Term3}.  We mean the graph theory definition, not the business definition.
+\item \textbf{$\tilde{r}$}. Distance between point of last contact and point of incident.
 
 %and so on
 
-%\end{itemize}
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Assumptions and Assumption Justifications}\label{sec:assumptions}
+\section{Assumptions and their Justifications}\label{sec:assumptions}
 
-\textit{About CATEGORY 1}
+\textit{About the \textbf{Missing Aircraft}}
 \begin{itemize}
-\item \textbf{The last known state of the lost aircraft is accurate for an interval of 15 minutes to 1 hour}.  The old "Log-on Interrogation" standard interval is 1 hour, while current proposals recommend a change to 15 minutes.
-\item \textbf{straightness}.  No maneuver from incident to crash. worse case of engine failure gives average of roughly 11 minutes. no time for intentional changes on the large scale.
-\item \textbf{immediate standby}.  Search agents are on edge instantaneously.
+\item \textbf{The initial search domain is an unobstructed rectangle of ocean with a length of 500km and width of 300km.} This rectangle would cover the whole uncertainty range based on 
+the last known state of the lost aircraft for an interval of 15 minutes to 1 hour based on INMARSAT's "Log-on Interrogation" old and newly recommended standards in light of the MH370 accident\textbf{[citation]}.
+\item \textbf{The missing aircraft is assumed to be still in this domain at $t=0$.}
+\item \textbf{The crashed/force landed aircraft debris is assumed to be remain close and floating at all time.} The assumption is that not enough time have passed for important
+\item \textbf{The local trajectory of concern is straight}. In addition to the obvious smoothness arguments, it is always possible to apply a conformal transform on the 
+
+\item \textbf{No banking maneuver was made from incident to crash.} This is reasonable for that even in the worse case of gliding due to single engine failure, the average time from initial to of roughly 11 minutes. no time for intentional changes on the large scale.
+\item \textbf{Hijacking or on-board navigation system only problems are not the cause of the incident}. Although hijacking incidents account for nearly 20\% of all accidents in past 50 years \textbf{Citation!}, SAR plane (or vessel) detectors are largely useless in finding a cruising rouge plane. Also see problem restatement.
+\item \textbf{The missing aircraft can be accurately modeled as either G280, Boeing 737-900ER, or Airbus 380.} These three types of aircraft are well-known representatives of small private/business jets, medium range commercial flights, and large international flights. Cruise speed and other aircraft form factors (e.g. Lift to Drag ratio) are derived based on this assumption.
+\item \textbf{Aircraft is operating at MTOW}. Assuming they have cargo and passengers 
+\item \textbf{Cruise altitude of all types of aircraft is assumed to be the same}.  Describe/Justify.
+%%%Add more items as needed
 %%%Add more items as needed
 \end{itemize}
 
 \ \\
-\textit{About CATEGORY 2}
+\textit{About the\textbf{ Search Agents}}
 \begin{itemize}
-\item \textbf{No hijacking}.  Add one-two sentences describing and justifying your assumption.
-\item \textbf{All aircrafts operating at MTOW}.  Describe/Justify.
-\item \textbf{Standard cruise altitude and cruise speed}.  Describe/Justify.
+\item \textbf{All agents are commanded and controlled by the central planner at each update interval}.
+\item \textbf{Agents arrive at the boundary of the search domain at $t=0$}.  Search agents are assumed to  edge instantaneously. a/c is in initial domain.
+\item \textbf{Unlimited bandwidth between search agent communications}.  This is necessary from a planning perspective as to ignore the less than pertinent issues with sensor fusion and coordination. Moreover, this factor is more than likely fixed by the hardware.
 %%%Add more items as needed
 \end{itemize}
 
