@@ -31,7 +31,7 @@ G280.R = [10 20 135 56]*1e3; %m
 %% Assumptions/parameters
 
 % target aircraft make
-casenum = 3;
+casenum = 1;
 if casenum == 1, AC = B737;
 elseif casenum == 2, AC = A380;
 else AC = G280; end
@@ -43,8 +43,12 @@ rint = AC.Vc*interval; %m
 % probability resolution
 Nrtil = 1e1; %m
 % grid resolution
-N1grid = 30;
-N2grid = 20;
+N1grid = 100;
+N2grid = 60;
+% N1grid = 30;
+% N2grid = 20;
+% # of 1D quadrature points
+Nquad = 2;
 % boundary distance [-x1 +x1 -x2 +x2]
 bdry = [-150 350 -150 150]*1e3; %m
 % reverse probability
@@ -81,7 +85,6 @@ pdfx = @(rtil,x) ksdensity(Rprofile,Rtil(rtil,x))*ptheta(rtil,x);
 
 
 % pre-compute gauss-legendre points and weights
-Nquad = 3;
 [u,wu] = gaussquad(Nquad);
 [v,wv] = gaussquad(Nquad);
 Nu = nodefun(u);

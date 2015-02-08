@@ -43,8 +43,12 @@ rint = AC.Vc*interval; %m
 % probability resolution
 Nrtil = 1e1; %m
 % grid resolution
-N1grid = 30;
-N2grid = 20;
+N1grid = 100;
+N2grid = 60;
+% N1grid = 30;
+% N2grid = 20;
+% # of 1D quadrature points
+Nquad = 2;
 % boundary distance [-x1 +x1 -x2 +x2]
 bdry = [-150 350 -150 150]*1e3; %m
 % reverse probability
@@ -81,7 +85,6 @@ pdfx = @(rtil,x) ksdensity(Rprofile,Rtil(rtil,x))*ptheta(rtil,x);
 
 
 % pre-compute gauss-legendre points and weights
-Nquad = 3;
 [u,wu] = gaussquad(Nquad);
 [v,wv] = gaussquad(Nquad);
 Nu = nodefun(u);
@@ -108,7 +111,7 @@ for ev=1:1:S.numelements(2)
 end
 %% renormalize and save data
 P = P / sum(P(:));
-save(num2str(casenum,'prior%d.mat'),'P','S','Splot');
+save(num2str(casenum,'prior%d.mat'),'P','S');
 % load(num2str(casenum,'prior%d.mat'))
 
 %% crash probability distribution graph
@@ -131,6 +134,8 @@ PP = P;
 dt = .5*60*60; %s
 % average debris drift speed
 dV = 10; %m/s
+% escape/out of range probability
+Pescape = 0;
 
 figure(); hold all; grid on;
 traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');

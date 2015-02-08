@@ -214,10 +214,9 @@ Recall the lost Malaysian flight MH370. Build a generic mathematical model that 
 \begin{itemize}
 \item \textbf{The initial search domain is a $500$km by $300$km rectangle of unobstructed ocean.} This rectangle would cover the whole uncertainty range based on 
 the last known state of the lost aircraft for an interval of 15 minutes to 1 hour based on INMARSAT's "Log-on Interrogation" old and newly recommended standards in light of the MH370 accident\textbf{[citation]}.
-\item \textbf{The missing aircraft is assumed to be still in this domain at $t=0$.}
-\item \textbf{The crashed/force landed aircraft debris is assumed to be remain close and floating at all time.} The assumption is that not enough time have passed for important
+\item \textbf{The missing aircraft is assumed to be still in this domain at $t=0$.} Although escaping the domain at a later time is allowed.
+\item \textbf{The crashed/force landed aircraft debris is assumed to be remain close to each other and floating at all time.} The assumption is that not enough time have passed for important targets (e.g. lifeboats) 
 \item \textbf{The local trajectory of concern is straight}. In addition to the obvious smoothness arguments, it is always possible to apply a conformal transform on the entire search domain to obtain a solution based on a curved trajectory.
-\item \textbf{The coarse search cell is assumed to be $17$km by $15$km.} This is based on computational issues. Further refinements are simply an exercise for the computers.
 
 \item \textbf{No banking maneuver was made from incident to crash.} This is reasonable for that even in the worse case of gliding due to single engine failure, the average time from initial to of roughly $11$ minutes\textbf{[Citation or see derivation later]}. And this time is not long enough to cause trajectory deviations across different search cells.
 \item \textbf{Hijacking or on-board navigation system only problems are not the cause of the incident}. Although hijacking incidents account for nearly $20$\% of all accidents in past 50 years \textbf{Citation!}, SAR plane (or vessel) detectors are largely useless in finding a cruising rouge plane. Also see problem restatement.
@@ -243,9 +242,9 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \item \textbf{Unlimited bandwidth between search agent communications}.  This is necessary from a planning perspective as to ignore the less than pertinent issues with sensor fusion and coordination. Moreover, this factor is more than likely fixed by the hardware.
 \item \textbf{Types of search agents considered are helicopter, fixed wing UAVs, and surface vessels.} Although the problem only mentions "search planes," it is very common to have sur
 \item \textbf{Search agents use either magnetometer or camera as their main detector.}
-\item \textbf{Search agents all have a lateral range function of a bivariate Gaussian as a function of their type, altitude, and speed.}
-\item \textbf{The probability of false alarm is assumed to be $5$\%.} Lack of exact literature references, pretty good generic guess.
-\item \textbf{The search agents have perfect knowledge of local drift direction.} Modern softwares used by professional SAR entities (e.g. SARPOS by U.S. Coastal Guards) all have existing database to accommodate real-time data.
+\item \textbf{Search agents all have a lateral range function of a bivariate Gaussian as a function of their type, altitude, and speed.} Detection follows Koopman's Random search formula.
+\item \textbf{The probability of false alarm is assumed to be $5$\%.} Lack of exact literature references, pretty good generic guess.??
+\item \textbf{The search agents have perfect knowledge of local drift direction.} Although this is unlikely on the operations level, modern planning softwares used by professional SAR entities (e.g. SARPOS by U.S. Coastal Guards) all have existing database to accommodate real-time ocean drifting, data that are not useful on a fictitious geography.
 %%%Add more items as needed
 \end{itemize}
 
@@ -283,6 +282,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 
 %% Describe your mathematical model and list all relevant equations.  Remember to make your paper easy to skim by placing variable definitions by all equations.  We prefer to use actual words for variables if that variable will only be used once or twice.  Don't use Greek letters unless your variable is directly analogous to what a Greek letter usually means in math or physics.  Feel free to write important sentences \textbf{in bold} to make your paper easier to skim.
 
+\textbf{The coarse search cell is assumed to be $17$km by $15$km.} This is based on computational issues. Further refinements are simply an exercise for the computers.
 
 \subsection{Description}\label{subsecmeth:desc}
 
@@ -333,7 +333,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 %\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Comparison to a Greedy Algorithm}\label{sec:greedyalg}
+\section{Comparison to a "Steepest Decent" Search Plan}\label{sec:greedyalg}
 
 %%% Besides your main model, always have a ``control'' algorithm to compare to.  It's even better if you can think of an extra ``good'' algorithm as well.  
 
@@ -403,7 +403,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 
 \textit{Strengths:}
 \begin{itemize}
-\item \textbf{Short bullet point}.  Description.
+\item \textbf{simple effective}.  Description.
 \item \textbf{Short bullet point}.  Description.
 \item \textbf{Short bullet point}.  Description.
 \item \textbf{Short bullet point}.  Description.
@@ -412,9 +412,9 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \ \\
 \noindent \textit{Weaknesses:}
 \begin{itemize}
-\item \textbf{Short bullet point}.  Description.
-\item \textbf{Short bullet point}.  Description.
-\item \textbf{Short bullet point}.  Description.
+\item \textbf{resolution/grid size}.  Description.
+\item \textbf{renomalization/discretization error}.  Description.
+\item \textbf{very simplified drifting}.  Description.
 \item \textbf{Short bullet point}.  Description.
 \item \textbf{Short bullet point}.  Description.
 \end{itemize}
