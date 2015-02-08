@@ -22,11 +22,19 @@ A380.Wfuel = 85E3 - A380.Wdry;
 B737.Vc = 217;
 G280.Vc = 217;
 A380.Vc = 217;
+% crash distance
+% fire, collision, glide, other
+A380.R = [24 50 160 80]*1e3; %m
+B737.R = [15 30 140 63]*1e3; %m
+G280.R = [10 20 135 56]*1e3; %m
 
 %% Assumptions/parameters
 
-% lost aircraft model
-AC = B737;
+% target aircraft make
+casenum = 1;
+if casenum == 1, AC = B737;
+elseif casenum == 2, AC = A380;
+else AC = G280; end
 % remaining fuel ratio at incident
 Fr = .5;
 % communication interval/distance
@@ -40,15 +48,14 @@ N2grid = 20;
 % boundary distance [-x1 +x1 -x2 +x2]
 bdry = [-150 350 -150 150]*1e3; %m
 % reverse probability
-s = .05; q = 1/pi-2*s; 
+s = .05; q = 1/pi-2*s;
 
 %% incident to crash range pdf
 
 AC.Rc = AC.Vc/gE/AC.SFC*AC.L2D*log(1+Fr*AC.Wfuel/AC.Wdry);
 AC.Tc = AC.Rc/AC.Vc;
-% engine fail, cargo, collsion, fire
-Ncrash = [972, 548, 1226, 822];
-Rcrash = [150, 50, 60, 30]*1e3; %m
+% fire, collision, glide, other
+Ncrash = [1406, 1901, 901, 498];
 
 % stdev of the statistics (guess)
 Rstdev = [.2 .2 .2 .2];
@@ -56,7 +63,7 @@ Rstdev = [.2 .2 .2 .2];
 Rprofile = [];
 for i=1:numel(Ncrash)
     Rprofile = [Rprofile;
-        randn(Ncrash(i),1)*Rstdev(i)*Rcrash(i) + Rcrash(i)];
+        randn(Ncrash(i),1)*Rstdev(i)*AC.R(i) + AC.R(i)];
 end
 
 % visuialization
@@ -71,6 +78,7 @@ theta = @(rtil,x) abs(atan2(x(2),x(1)-rtil));
 ptheta = @(rtil,x) q+theta(rtil,x)*(s-q)/pi;
 pdfx = @(rtil,x) ksdensity(Rprofile,Rtil(rtil,x))*ptheta(rtil,x);
 %% discritized probability at cell (m,n)
+
 
 % pre-compute gauss-legendre points and weights
 Nquad = 3;
@@ -100,17 +108,16 @@ for ev=1:1:S.numelements(2)
 end
 %% renormalize and save data
 P = P / sum(P(:));
-save('prior.mat','P','S','Splot');
+save(num2str(casenum,'prior%d.mat'),'P','S','Splot');
+% load(num2str(casenum,'prior%d.mat'))
 
 %% crash probability distribution graph
 
-% load('prior.mat')
 Splot = Surface(N1grid,N2grid,bdry/1e3);
 figure(); hold all; grid on;
 plottwoform(Splot,P,3); colorbar;
 xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
 title('Probability of Aircraft Landed in Cell');
-hold all;
 traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
 set(traj,'linewidth',2,'markersize',15)
 saveas(gcf,'prior.png');
@@ -118,31 +125,19 @@ saveas(gcf,'prior.png');
 %% drift diffusion transition
 
 % update interval
-dt = 60*60; %s
+dt = .5*60*60; %s
 % average debris drift speed
 dV = 10; %m/s
-% average debris drift speed
-ds = dV*dt; %m
-% statistics
-mu = [0 0];
-sigma_s = eye(2)*ds; %m
-% grid size
-dx1 = mean(diff(unique(S.xnodes))); %m
-dx2 = mean(diff(unique(S.ynodes))); %m
-% drift transition bound [-x1 +x1 -x2 +x2]
-driftBD = 1.5*[-dx1 dx1 -dx2 dx2]; %m
-Sdrift = Surface(3,3,driftBD);
 
-for i = 1:
-Fdrift = mvnpdf([Sdrift.xnodes(:) Sdrift.ynodes(:)],mu,sigma_s);
-Fdrift = reshape(Fdrift,Sdrift.dim);
-surf(Sdrift.xnodes,Sdrift.ynodes,Fdrift);
-caxis([min(Fdrift(:))-.5*range(Fdrift(:)),max(Fdrift(:))]);
-view(2);
-xlabel('x1'); ylabel('x2'); zlabel('Probability Density');
-
-%% assemble transition matrix
-Td = eye(N1grid+N2grid);
+figure(); hold all; grid on;
+traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
+plottwoform(Splot,P,3); colorbar;
+xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
+title('Probability of Aircraft Landed in Cell');
+set(traj,'linewidth',2,'markersize',15)
+for tstep = 1:10
+    [P,Pescape] = driftTransition(S,dt,dV,P);
+end
 
 %% add in (wind) random field disturbance
 
