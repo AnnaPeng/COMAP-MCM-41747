@@ -98,11 +98,13 @@ for ev=1:1:S.numelements(2)
     for eu=1:1:S.numelements(1)
         for l=1:1:Nquad
             for k=1:1:Nquad
-                % compute physical coordinates
+                % pullback quadrature pts coordinate 
                 [x,y] = S.coords(eu,ev,Nu(:,k),Nv(:,l));
+                Ptemp = 0;
                 for i = 1:Nrtil
-                    P(eu,ev) = P(eu,ev) + pdfx(rtil(i),[x;y])*rint/Nrtil;
+                    Ptemp = Ptemp + pdfx(rtil(i),[x;y])*rint/Nrtil;
                 end
+                P(eu,ev) = P(eu,ev) + wu*wv*Ptemp;
             end
         end
     end
