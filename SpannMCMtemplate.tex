@@ -186,9 +186,12 @@
 %% One quick paragraph describing the problem and foreshadowing your approach.
 
 
-Searching for a lost plane:
+Pursuit of a lost plane:
 
-Recall the lost Malaysian flight MH370. Build a generic mathematical model that could assist "searchers" in planning a useful search for a lost plane feared to have crashed in open water such as the Atlantic, Pacific, Indian, Southern, or Arctic Ocean while flying from Point A to Point B. Assume that there are no signals from the downed plane. Your model should recognize that there are many different types of planes for which we might be searching and that there are many different types of search planes, often using different electronics or sensors. Additionally, prepare a 1-2 page non-technical paper for the airlines to use in their press conferences concerning their plan for future searches.
+The disappearance of flight MH370 kindled a long debate and serious introspection. The methods used for hunting the plane came into serious questioning when even after months, the searchers were no closer to discovering the plane or its debris. 
+The problem asks to Build a generic mathematical model that could assist "searchers" in planning a useful search for a lost plane feared to have crashed in open water such as the Atlantic, Pacific, Indian, Southern, or Arctic Ocean while flying from Point A to Point B. Like in the case of MH370, we arent receiving any signal from the plane that is feared to have crashed. 
+
+The challenge in building a search model is the variation in Plane sizes and the different search techniques used. The problem requires to account for both.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -222,6 +225,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \item \textbf{No banking maneuver was made from incident to crash.} This is reasonable for that even in the worse case of gliding due to single engine failure, the average time from initial to of roughly $11$ minutes\textbf{[Citation or see derivation later]}. And this time is not long enough to cause trajectory deviations across different search cells.
 \item \textbf{Hijacking or on-board navigation system only problems are not the cause of the incident}. Although hijacking incidents account for nearly $20$\% of all accidents in past 50 years \textbf{Citation!}, SAR plane (or vessel) detectors are largely useless in finding a cruising rouge plane. Also see problem restatement.
 \item \textbf{The missing aircraft can be accurately modeled as either G280, Boeing 737-900ER, or Airbus 380.} These three types of aircraft are well-known representatives of small private/business jets, medium range commercial flights, and large international flights. Cruise speed and other aircraft form factors (e.g. Lift to Drag ratio) are derived based on this assumption.
+\item \textbf{The crash radius of the aircraft is only a function of the cause of the incident and the type of the aircraft.} In addition, we assume that the historical distribution of the cause of the accidents is a reasonable prior for the current incident at hand, and it is it is invariant with respect to the type of the aircraft\footnote{We do not have an aircraft aficionado at hand to sift through and separate the accident records based on size}.
 \item \textbf{Aircraft is operating at MTOW}. Assuming they have cargo and passengers 
 \item \textbf{Cruise altitude of all types of aircraft is assumed to be the same}.  Describe/Justify.
 %%%Add more items as needed

@@ -19,9 +19,9 @@ gE = 9.81; %m/s2
 % G280.Wfuel = 85E3 - G280.Wdry;
 % A380.Wfuel = 85E3 - A380.Wdry;
 % Cruise speed (m/s)
-B737.Vc = 217;
-G280.Vc = 217;
-A380.Vc = 217;
+B737.Vc = 243;
+G280.Vc = 250;
+A380.Vc = 262;
 % crash distance
 % fire, collision, glide, other
 A380.R = [24 50 160 80]*1e3; %m

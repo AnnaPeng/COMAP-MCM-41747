@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.5-0.9999.3 (MiKTeX 2.9) (preloaded format=xelatex 2014.12.11)  8 FEB 2015 06:14
+This is XeTeX, Version 3.1415926-2.5-0.9999.3 (MiKTeX 2.9) (preloaded format=xelatex 2014.12.11)  8 FEB 2015 12:51
 entering extended mode
 **SpannMCMtemplate.tex
 (C:\Users\fl3537\Desktop\MCM\SpannMCMtemplate.tex
@@ -459,40 +459,52 @@ Underfull \hbox (badness 10000) in paragraph at lines 168--169
  []
 
 [2]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 199.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 202.
 
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 199.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 202.
 Requested font "cmti12" at 12.0pt
 Requested font "cmbxti10" at 12.0pt
  [1] [2]
-[3]
+Requested font "cmex7" at 7.0pt
+Requested font "cmex7" at 5.0pt
+Requested font "msam10" at 10.0pt
+Requested font "msam7" at 7.0pt
+Requested font "msam5" at 5.0pt
+Requested font "msbm10" at 10.0pt
+Requested font "msbm7" at 7.0pt
+Requested font "msbm5" at 5.0pt
+Requested font "lasy10" at 10.0pt
+Requested font "lasy7" at 7.0pt
+Requested font "lasy5" at 5.0pt
+
+[3] [4]
 Requested font "cmr12" at 14.4pt
 Requested font "cmbx12" at 14.4pt
- [4] [5]
+ [5]
 
-LaTeX Warning: Empty `thebibliography' environment on input line 472.
+LaTeX Warning: Empty `thebibliography' environment on input line 476.
 
 
 AED: lastpage setting LastPage
 [6]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 493.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 493.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 497.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 497.
  (C:\Users\fl3537\Desktop\MCM\SpannMCMtemplate.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 493.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 493.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 493.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 497.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 497.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 497.
  ) 
 Here is how much of TeX's memory you used:
- 9679 strings out of 429025
- 130781 string characters out of 3166797
+ 9694 strings out of 429025
+ 130934 string characters out of 3166797
  201583 words of memory out of 3000000
- 12874 multiletter control sequences out of 15000+200000
- 11187 words of font info for 43 fonts, out of 3000000 for 9000
+ 12885 multiletter control sequences out of 15000+200000
+ 13204 words of font info for 54 fonts, out of 3000000 for 9000
  912 hyphenation exceptions out of 8191
- 29i,10n,45p,725b,397s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 29i,10n,45p,504b,399s stack positions out of 5000i,500n,10000p,200000b,50000s
 
 Output written on SpannMCMtemplate.pdf (8 pages).

@@ -1,9 +1,9 @@
 \contentsline {section}{\numberline {1}Problem Restatement}{1}{section.1}
 \contentsline {section}{\numberline {2}Terminologies and Conventions}{1}{section.2}
 \contentsline {section}{\numberline {3}Assumptions and their Justifications}{1}{section.3}
-\contentsline {section}{\numberline {4}Literature Review}{4}{section.4}
-\contentsline {section}{\numberline {5}Criteria for Optimal Solution}{4}{section.5}
-\contentsline {section}{\numberline {6}Describe Your Method}{4}{section.6}
+\contentsline {section}{\numberline {4}Literature Review}{5}{section.4}
+\contentsline {section}{\numberline {5}Criteria for Optimal Solution}{5}{section.5}
+\contentsline {section}{\numberline {6}Describe Your Method}{5}{section.6}
 \contentsline {subsection}{\numberline {6.1}Description}{5}{subsection.6.1}
 \contentsline {subsection}{\numberline {6.2}Mathematical Interpretation}{5}{subsection.6.2}
 \contentsline {subsection}{\numberline {6.3}Comparison to Most Interesting Literature Paper}{5}{subsection.6.3}
