@@ -250,6 +250,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \item \textbf{The probability of false alarm is assumed to be $0$\%.} Lack of exact literature references, industry standard assumption [2013 book]. 
 \item \textbf{The search agents have no knowledge of local drift direction.} Although modern planning softwares used by professional SAR entities (e.g. SARPOS by U.S. Coastal Guards) all have existing database to accommodate real-time ocean drifting, these data are often not precise, not to mention useless on a fictitious geography.
 \item \textbf{Ignore refueling problems.} In operation, search agents can request refueling vehicles etc. and the time is not quite relevant.
+\item \textbf{Agents move either horizontally or vertically.} In operation, search agents can request refueling vehicles etc. and the time is not quite relevant.
 
 %%%Add more items as needed
 \end{itemize}
@@ -290,7 +291,6 @@ In real life the only success criterion is whether we can find the target and ho
 
 %% Describe your mathematical model and list all relevant equations.  Remember to make your paper easy to skim by placing variable definitions by all equations.  We prefer to use actual words for variables if that variable will only be used once or twice.  Don't use Greek letters unless your variable is directly analogous to what a Greek letter usually means in math or physics.  Feel free to write important sentences \textbf{in bold} to make your paper easier to skim.
 
-\textbf{The coarse search cell is assumed to be $17$km by $15$km.} This is based on computational issues. Further refinements are simply an exercise for the computers.
 
 \subsection{Description}\label{subsecmeth:desc}
 
@@ -319,7 +319,12 @@ In real life the only success criterion is whether we can find the target and ho
 %                 &   = Final right hand side
 %\end{align*}
 
+Probability of Escape
 
+\[P[target\,in\,\partial\Omega|t=n]=:q_n\]
+\[P[escaped|t=0]=:Q_0=q_0=0\]
+\[P[escaped|t=n, not\,escaped|t=n-1]=q_n\]
+\[P[escaped|t=n]=q_0+q_1\cdot(1-Q_0)+\cdots+q_n\cdot(1-Q_{n-1})\]
 
 \subsection{Comparison to Most Interesting Literature Paper}\label{subsec:hess}
 
@@ -336,7 +341,7 @@ In real life the only success criterion is whether we can find the target and ho
 
 UAV paper
 
-Current SARPOS system
+Current SARPOS system (particle filter)
 
 %\newpage
 
@@ -358,7 +363,7 @@ also multiple agent/single agent etc.
 \section{Experimental Setup}\label{sec:experiment}
 %% State clearly what you are testing.  State your input data and what probability distributions were used in generating it.  Talk a little bit about the implementation of your program (language, if something works a bit differently than the mathematical description you already gave them).  Split into subsections as needed.
 
-
+grid cell size
 
 
 %\newpage

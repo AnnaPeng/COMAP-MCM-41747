@@ -175,16 +175,19 @@ heli.alt = 5.5e3; %m
 heli.FA = .05;
 heli.sig = cdf2sig(heli.Rdetect); %m
 
-%% Detection Probability
+%% search agent initial states
+Ns = 1000;
 
-Pd = @(xs,sig) mvncdf(x1r,x2r,xs,sig);
+%% Detection Probability
+mvncdf(x1r,x2r,xs,sig);
 %% Distributed Search Plan (edge first)
 
-
+Pescape = 0;
 % propogation loop
 for tstep = 1:Nsim
     [PP,temp] = driftTransition2(S,dt,dV,PP);
     Pescape = Pescape+temp;
+    update 
 end
 
 %% Distributed Search Plan (center first)

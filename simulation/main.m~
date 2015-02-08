@@ -176,8 +176,7 @@ heli.FA = .05;
 heli.sig = cdf2sig(heli.Rdetect); %m
 
 %% Detection Probability
-
-Pd = @(xs,sig) mvncdf(,xs,sig);
+mvncdf(x1r,x2r,xs,sig);
 %% Distributed Search Plan (edge first)
 
 
