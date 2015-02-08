@@ -1,6 +1,6 @@
 function [P,Pescape] = driftTransition(S,dt,dV,P)
 
-% assumes no knowledge of local drift direction.
+% assumes knowledge of local drift direction.
 
 Ppadded = zeros(S.dim+1);
 Ppadded(2:(end-1),2:(end-1)) = P;
