@@ -118,12 +118,15 @@ figure(); hold all; grid on;
 plottwoform(Splot,P,3); colorbar;
 xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
 title('Probability of Aircraft Landed in Cell');
+hold all;
 traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
 set(traj,'linewidth',2,'markersize',15)
 saveas(gcf,'prior.png');
 
 %% drift diffusion transition
 
+% Propogated P
+PP = P;
 % update interval
 dt = .5*60*60; %s
 % average debris drift speed
@@ -131,12 +134,16 @@ dV = 10; %m/s
 
 figure(); hold all; grid on;
 traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
-plottwoform(Splot,P,3); colorbar;
+plottwoform(Splot,PP,3); colorbar;
 xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
 title('Probability of Aircraft Landed in Cell');
+hold all;
 set(traj,'linewidth',2,'markersize',15)
 for tstep = 1:10
-    [P,Pescape] = driftTransition(S,dt,dV,P);
+    pause(1)
+    [PP,temp] = driftTransition(S,dt,dV,PP);
+    Pescape = Pescape*temp;
+    plottwoform(Splot,PP,3);
 end
 
 %% add in (wind) random field disturbance

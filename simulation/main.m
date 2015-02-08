@@ -31,7 +31,7 @@ G280.R = [10 20 135 56]*1e3; %m
 %% Assumptions/parameters
 
 % target aircraft make
-casenum = 1;
+casenum = 3;
 if casenum == 1, AC = B737;
 elseif casenum == 2, AC = A380;
 else AC = G280; end
@@ -108,7 +108,7 @@ for ev=1:1:S.numelements(2)
 end
 %% renormalize and save data
 P = P / sum(P(:));
-save(num2str(casenum,'prior%d.mat'),'P','S','Splot');
+save(num2str(casenum,'prior%d.mat'),'P','S');
 % load(num2str(casenum,'prior%d.mat'))
 
 %% crash probability distribution graph
@@ -131,6 +131,8 @@ PP = P;
 dt = .5*60*60; %s
 % average debris drift speed
 dV = 10; %m/s
+% escape/out of range probability
+Pescape = 0;
 
 figure(); hold all; grid on;
 traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
@@ -141,8 +143,8 @@ hold all;
 set(traj,'linewidth',2,'markersize',15)
 for tstep = 1:10
     pause(1)
-    [PP,Pescape] = driftTransition(S,dt,dV,PP);
-    Pescape
+    [PP,temp] = driftTransition(S,dt,dV,PP);
+    Pescape = Pescape*temp;
     plottwoform(Splot,PP,3);
 end
 
