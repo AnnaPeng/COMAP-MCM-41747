@@ -1,6 +1,7 @@
-function [P,Pescape] = driftTransition(S,dt,dV,P)
+function [P,Pescape] = driftTransitionOLD(S,dt,dV,P)
 
-% assumes perfect knowledge of local drift direction or speed.
+% assumes perfect knowledge of local drift direction but perfect knowledge
+% of speed. (WEIRD!)
 
 Ppadded = zeros(S.dim+1);
 Ppadded(2:(end-1),2:(end-1)) = P;
@@ -17,7 +18,6 @@ dn = dx/2;
 dd = sqrt(2)*dn;
 
 sSim = randn(S.numelements)*sigma_s + ds;
-dirSim = rand
 Tdn = sSim > dn;
 Tdd = sSim > dd;
 

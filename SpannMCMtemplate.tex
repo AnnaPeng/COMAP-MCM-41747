@@ -235,8 +235,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \ \\
 \textit{\textbf{About Debris Drifting}}
 \begin{itemize}
-\item \textbf{The local drift direction can be accurately modeled as uniformly distributed across all angles.} In addition, the drift direction is assumed to be constant within each cell.
-\item \textbf{The local drift speed can be accurately modeled as a Gaussian distribution.}
+\item \textbf{The local drift direction and speed can be accurately modeled as constant within each cell.} Operationally, the resolution of the cells can be adapted to actual drift data.
 \end{itemize}
 
 \ \\
@@ -248,8 +247,9 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \item \textbf{Types of search agents considered are helicopter, fixed wing UAVs, and surface vessels.} Although the problem only mentions "search planes," it is very common to have sur
 \item \textbf{Search agents use either magnetometer or camera as their main detector.}
 \item \textbf{Search agents all have a lateral range function of a bivariate Gaussian as a function of their type, altitude, and speed.} Detection follows Koopman's Random search formula.
-\item \textbf{The probability of false alarm is assumed to be $5$\%.} Lack of exact literature references, pretty good generic guess.??
-\item \textbf{The search agents have perfect knowledge of local drift direction.} Although this is unlikely on the operations level, modern planning softwares used by professional SAR entities (e.g. SARPOS by U.S. Coastal Guards) all have existing database to accommodate real-time ocean drifting, data that are not useful on a fictitious geography.
+\item \textbf{The probability of false alarm is assumed to be $0$\%.} Lack of exact literature references, industry standard assumption [2013 book]. 
+\textbf{The search agents have no knowledge of local drift direction.} Although modern planning softwares used by professional SAR entities (e.g. SARPOS by U.S. Coastal Guards) all have existing database to accommodate real-time ocean drifting, these data are often not precise, not to mention useless on a fictitious geography.
+
 %%%Add more items as needed
 \end{itemize}
 
@@ -263,7 +263,9 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 
 %% Maybe this isn't relevant to your paper or you want to just name this section as "INTRODUCTION".  There's a bit of flexibility as to what you can do now, so name this and the next few sections in whatever way fits the flow of your paper.  If convenient, I personally like to give a bit of scholarly journal background in some of my papers, but we don't do that every year depending on how weird the problems are.
 
+1983 paper
 
+2013 probablitic search book
 
 
 
@@ -277,7 +279,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 
 %% The problem usually doesn't give you a very specific definition for what the ``best'' solution is, so you should clearly explain it.  Feel free to rename this section something more relevant or use a different style and structure for the paper, just make sure you fulfill the goal of defining what the ``best'' solution looks like.
 
-
+In real life the only success criterion is whether we can find the target and how long it takes to do so.
 
 %\newpage
 
@@ -331,9 +333,9 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 
 %\section{}\label{labelme}
 
+UAV paper
 
-
-
+Current SARPOS system
 
 %\newpage
 
@@ -354,8 +356,6 @@ also multiple agent/single agent etc.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experimental Setup}\label{sec:experiment}
 %% State clearly what you are testing.  State your input data and what probability distributions were used in generating it.  Talk a little bit about the implementation of your program (language, if something works a bit differently than the mathematical description you already gave them).  Split into subsections as needed.
-
-
 
 
 
@@ -419,7 +419,7 @@ also multiple agent/single agent etc.
 \begin{itemize}
 \item \textbf{resolution/grid size}.  Description.
 \item \textbf{renomalization/discretization error}.  Description.
-\item \textbf{very simplified drifting}.  Description.
+\item \textbf{very simplified drift modeling}.  Description.
 \item \textbf{Short bullet point}.  Description.
 \item \textbf{Short bullet point}.  Description.
 \end{itemize}
