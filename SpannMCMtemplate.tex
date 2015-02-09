@@ -271,12 +271,9 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 
 %% Maybe this isn't relevant to your paper or you want to just name this section as "INTRODUCTION".  There's a bit of flexibility as to what you can do now, so name this and the next few sections in whatever way fits the flow of your paper.  If convenient, I personally like to give a bit of scholarly journal background in some of my papers, but we don't do that every year depending on how weird the problems are.
 
-The problem of finding the optimal search strategy of a target in a fixed region like a body of water, known in the literature as the ``Search and Screening Problem" had been extensively researched and analyzed by generations of researchers of operational research. First aroused as a naval problem, Koopman \cite{46koopman} established the foundation on how to approach this problem. In his seminal papers, many reasonable assumptions as well as useful probability functions and formulas (e.g. the random-search formula) are devised and still in use today.
+The problem of finding the optimal search strategy of a target in a fixed region like an open body of water, known in the literature as the ``Search and Screening Problem," had been extensively researched and analyzed by generations of researchers in the field of operational research. First aroused as a naval problem, Koopman \cite{46koopman} established the foundation on how to approach this problem. In his seminal papers, many reasonable assumptions as well as useful probability functions and formulas (e.g. the random-search formula) were devised and are still in use today. As the study for this problem matures, Stone analyzed the overall development of this field in his 1983 article \cite{83stone}, in which he explains the common assumptions made in practice and problems facing the continual development. He is also partially responsible to the construction of CASP (Computer Assisted Search Planning) algorithm that the USCG used to conduct ocean searching activities. He then went on to contribute constructing SAROPS, which will be compared with our algorithm in Section \ref{subsec:sarops}.
 
-Stone analyzed the overall development of this field up to 1983 in \cite{83stone}.
-
-
-In \cite{13kagan}, Kagan and Ben-Gal composed more recent progress on this old problem. The optimal search plan algorithm used later in this paper is derived from their IMTS methods.
+In \cite{13kagan}, Kagan and Ben-Gal exposited more recent progress on this old problem. Specifically, many group-testing and Statistical Local Search (SLS) algorithms are explained in detail with proofs. And our optimal search plan algorithm for this paper is derived from their IMTS methods.
 
 
 
@@ -290,21 +287,23 @@ In \cite{13kagan}, Kagan and Ben-Gal composed more recent progress on this old p
 
 %% The problem usually doesn't give you a very specific definition for what the ``best'' solution is, so you should clearly explain it.  Feel free to rename this section something more relevant or use a different style and structure for the paper, just make sure you fulfill the goal of defining what the ``best'' solution looks like.
 
-In real life, the only success criterion is whether we can find the target and how long it takes us to do so. However, from the standpoint of search plan optimization, what we want is \textbf{to maximize the likelihood of detection given a fixed search effort}.
+In real life, the only success criterion is whether we can find the target and how long it takes us to do so. However, from the standpoint of search plan optimization, what we want is \textbf{to maximize the likelihood of detection given a fixed search effort}. In symbols, given $k(\Omega,t)$ the search effort as our cost function, we want to maximize the Lagrangian $p(\Omega,t)\phi(\Omega,k(\Omega,t))-\lambda k(\Omega,t)$. Here $\Omega$ is our search domain as usual, $p$ the location density of our target, $\phi$ the probability of detection, $\lambda$ the Lagrange multiplier. From our assumptions, the Koopman Random-Search formula gives that $\phi(\Omega,k(\Omega,t)) = 1 - e^{-k(\Omega,t)}$.
 
 %\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Debris Density and Search Planning}\label{sec:mainmethod}
+\section{Debris Density Distribution and Search Planning}\label{sec:mainmethod}
 %% (Change the section title of course)
 
 %% Describe your mathematical model and list all relevant equations.  Remember to make your paper easy to skim by placing variable definitions by all equations.  We prefer to use actual words for variables if that variable will only be used once or twice.  Don't use Greek letters unless your variable is directly analogous to what a Greek letter usually means in math or physics.  Feel free to write important sentences \textbf{in bold} to make your paper easier to skim.
 
-Our first step is to model the probable crash radius of the aircraft in question. To do this, we noted the total number and root cause of commercial aircraft accidents since 1957. From the cruise velocity and cruising altitude of the approximate size of the aircraft as well as the mode of response in reaction to the cause of the accident, we can categorize the data into 4 scenarios: free fall, impact, gliding, and others. See Figure \ref{fig:CrashRadius}.
+\subsection{Crash Radius Distribution}\label{subsec:crashr}
+
+Our first step is to model\textbf{ the probable crash radius of the aircraft} in question. To do this, we noted the total number and root cause of commercial aircraft accidents since 1957\cite{as}. From the cruise velocity and cruising altitude of the approximate size of the aircraft as well as the mode of response in reaction to the cause of the accident, we can categorize the data into 4 scenarios: \textbf{free fall, impact, gliding, and others}. See Figure \ref{fig:CrashRadius}.
 
 For example, when facing an fire emergency on board, we assume that the airplane would descend in free fall with its initial cruise velocity since it is unlikely that the pilots can initiate significant correction maneuver due to chaos on board. Similarly for impact or collision (e.g. with birds), we assume a reduced initial velocity for the free fall. When only a single engine encounters failure, the aircraft is likely to be able to glide for a longer distance and hope for a smoother impact with the surface of the ocean. And such glide distance is obtained based on the lift to drag ratio of the aircraft frame. The others category includes all the other accidents such as airframe/structural problems, except that hijacking and navigation error only incidents were excluded per assumptions. See Section \ref{sec:assumptions}.
 
-Our model can of course improve with a more detailed analysis of previous accidents. However, since we are exaggerating the probable crash radius into a single distribution, we can always substitute a better prior into our optimization algorithm to obtain a more realistic optimal search plan.
+Our model can of course improve with a more detailed analysis of previous accidents. However, since we are exaggerating the probable crash radius into a single distribution, we can \textit{always} substitute a better prior into our optimization algorithm to obtain a more realistic optimal search plan.
 
 \begin{center}
 	\begin{figure}[H]
@@ -316,40 +315,25 @@ Our model can of course improve with a more detailed analysis of previous accide
 \end{center}
 
 
-\subsection{Description}\label{subsecmeth:desc}
 
-%% Maybe you want to split this section into subsections.  Just suggesting things here.  Change as you see fit.  
-%% By the way, you don't have to fill out the \label{}'s if you don't want to.  They're so you can \ref{} in the middle of the paper then move entire sections around later without breaking your numbering.
+\subsection{Location Density in Search Domain}\label{subsecDist:locd}
 
-
-\subsection{Mathematical Interpretation}\label{subsecDist:math}
-
-%% Here's quick lesson on equations if you need it:
-
+Once we obtained the distribution of crash distances, we can calculate the location density at each point away from the intended trajectory (the horizontal line at the bottom in Figure \ref{fig:geom}) by (Notations explained on next page)
+\[P[crash\,at\,\text{\huge $\ast$}] = \int P[crash\,radius=\tilde{R}(\tilde{r})]\cdot P[Deviation=\theta(\tilde{R}(\tilde{r}))]\,d\tilde{r}\]
 
 \begin{center}
 	\begin{figure}[H]
 		\centering
 		\adjincludegraphics[width=0.5\linewidth,trim={{.3\width} {.45\height} {.3\width} {.2\height}},clip]{simulation/LocationDensityExplain.png}
-		\caption{Illustration of the accident geometry. The left {\large $\times$} represents the last known location, the right {\large $\times$} first checkpoint where the aircraft was not found. The incident site is marked by the red {\huge $\ast$}, while the crash site is marked by the black {\huge $\ast$}.}
-		\label{fig:CrashRadius}
+		\caption{Illustration of the accident-site geometry. The left {\large $\times$} represents the last known location, the right {\large $\times$} first checkpoint where the aircraft was not found. The incident site is marked by the red {\huge $\ast$}, while the crash site is marked by the black {\huge $\ast$}.}
+		\label{fig:geom}
 	\end{figure}
 \end{center}
 
-The initial location density at each point away from the intended trajectory is calculated as
-
-\[P[crash\,at\,\text{\huge $\ast$}] = \int P[crash\,radius=\tilde{R}(\tilde{r})]\cdot P[Deviation=\theta(\tilde{R}(\tilde{r}))]\,d\tilde{r}\]
-
 Finally, the probability that the aircraft crashed within one cell is obtained through the double integral.
-%\begin{equation}\label{eqn:}
-% Type equation as if it were in between $ $ but you don't need the $.
-%\end{equation}
 
+\subsection{Location Density in Search Domain}\label{subsecDist:locd}
 
-%\begin{align*}
-%\end{align*}
-
-%%%% Use & to split columns in align mode.  The * is optional, makes the equation not have a number.  You can have as many &'s per line as needed.
 
 Let us recall the deﬁnitions and notation which were applied in the search and screening
 methods (Section 2.1.1). Assume that the sample space X ={x1,x2,...,xn} represents a
@@ -393,11 +377,11 @@ is continuous, as shown in Figure 2.7.
 In comparison to the direct Monte Carlo / particle filter approach employed by the U.S. Coast Guards' SAROPS system, our search planning algorithm
 \begin{itemize}
 	\item \textbf{do not use multiple senarios.} due to problem statement; More see \ref{sec:assumptions}
-	\item \textbf{ss}
+	\item \textbf{not using a particle filter.}
 \end{itemize}
 
 
-\subsection{Comparison to SLS Methods}\label{subsec:newer}
+%\subsection{Comparison to SLS Methods}\label{subsec:newer}
 
 
 
@@ -434,7 +418,20 @@ Naively, one can also devise the classic parallel search plan where the search a
 \section{Experimental Setup}\label{sec:experiment}
 %% State clearly what you are testing.  State your input data and what probability distributions were used in generating it.  Talk a little bit about the implementation of your program (language, if something works a bit differently than the mathematical description you already gave them).  Split into subsections as needed.
 
-By changing the type of lost plane, we can notice the difference in prior distribution.
+By changing the type of lost plane, we can notice the difference in prior distribution as demonstrated in Figure \ref{fig:prior} below.
+
+
+\begin{center}
+	\begin{figure}[H]
+		\centering
+		 (a)\includegraphics[width=0.6\linewidth]{simulation/G280_PriorDistribution1.png}\\
+		 (b)\includegraphics[width=0.6\linewidth]{simulation/B737-900ER_PriorDistribution1.png}\\
+		 (c)\includegraphics[width=0.6\linewidth]{simulation/Airbus380_PriorDistribution1.png}
+		\caption{Prior Distributions. From top to bottom, (a) G280; (b) Boeing 737-900ER; (c) Airbus 380.}
+		\label{fig:prior}
+	\end{figure}
+\end{center}
+
 
 
 %\newpage
@@ -517,10 +514,9 @@ In Figure \ref{fig:NoSearchEscapeExplain}, it is evident that reduction in cell 
 \begin{itemize}
 \item \textbf{Recommendation 1}.  Why the data says so.
 \item \textbf{Recommendation 2}.  Why the data says so.
-\item \textbf{Recommendation 3}.  Why the data says so.
-\item \textbf{Recommendation 4}.  Why the data says so.
+\item \textbf{Need a more accessible database that can model airplane crash radius and ocean drifts.}.  Why the data says so.
 % Exact Number of recommendations isn't important
-\item \textbf{Make Sure to form a team of search agents that would not give up the search half way}.  One person contributing is $\lll$ two person $\lll$ three person, etc.
+\item \textbf{Make Sure to form a team of search agents that would not give up the search half way}. From our personal experience, we conclude that one person contributing is $\lll$ two person $\lll$ three person, etc.
 \end{itemize}
 
 
@@ -553,7 +549,7 @@ In Figure \ref{fig:NoSearchEscapeExplain}, it is evident that reduction in cell 
 
 %\bibitem{NameofItem2}  NameofOnlineResourceorGovernmentAgency. ``Title.'' \url{http://www2.census.gov/census_2000/datasets/Summary_File_1/New_York/}
 
-\bibitem{uav} 
+\bibitem{as} \url{http://Aviation-safety.net}
 
 \bibitem{heli} U.S. Coast Guard Acquisition Directorate. ``Aviation Fact Sheet." \url{http://www.uscg.mil/acquisITION/programs/pdf/air.pdf}
 

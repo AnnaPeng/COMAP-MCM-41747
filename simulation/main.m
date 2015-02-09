@@ -15,7 +15,7 @@ G280.R = [10 20 135 56]*1e3; %m
 %% Assumptions/parameters
 
 % target aircraft make
-ACcase = 2;
+ACcase = 3;
 if ACcase == 1
     AC = B737; acname = 'B737-900ER';
 elseif ACcase == 2
@@ -234,7 +234,3 @@ mvncdf(x1r,x2r,xs,sig);
 %% concentrated "single" agent Search Plan (steepest descent)
 
 
-%% Monte Carlo evaluation of time of capture
-
-
-% "particle filter" ?
