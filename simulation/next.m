@@ -16,9 +16,5 @@ for i = 1:size(P,1)
 end
 
 P = Ppadded(Nmove:(end-Nmove+1),Nmove:(end-Nmove+1));
-% renormalization
-P = P./sum(P(:));
-q = sum(sum(Ppadded([1:Nmove-1 (end-Nmove+1):end],:))) + ...
-    sum(sum(Ppadded(:,[1:Nmove-1 (end-Nmove+1):end])));
-
+q = 1 - sum(P(:));
 end

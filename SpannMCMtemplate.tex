@@ -236,7 +236,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \textit{\textbf{About Debris Drifting}}
 \begin{itemize}
 \item \textbf{The local drift direction and speed can be accurately modeled as constant within each cell.} Operationally, the resolution of the cells can be adapted to actual drift data.
-\item \textbf{Nothing outside the search domain drifts back into it.} seems nice.
+\item \textbf{Nothing outside the search domain drifts back into it.} This assumption only makes searching harder so good for us.
 \end{itemize}
 
 \ \\
@@ -322,10 +322,6 @@ In real life the only success criterion is whether we can find the target and ho
 
 Probability of Escape
 
-\[P[target\,in\,\partial\Omega|t=n]=:q_n\]
-\[P[escaped|t=0]=:Q_0=q_0=0\]
-\[P[escaped|t=n, not\,escaped|t=n-1]=q_n\]
-\[P[escaped|t=n]=q_0+q_1\cdot(1-Q_0)+\cdots+q_n\cdot(1-Q_{n-1})\]
 
 \subsection{Comparison to Most Interesting Literature Paper}\label{subsec:hess}
 
@@ -458,7 +454,7 @@ grid cell size
 
 
 
-
+%%One Person is << Two Person << Three Person
 
 %%Uncomment below if you want to begin the next section on a newpage:
 %\newpage

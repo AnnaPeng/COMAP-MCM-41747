@@ -31,7 +31,7 @@ rint = AC.Vc*interval; %m
 % continuous probability (rtil) riemann sum resolution
 Nrtil = 50;
 % grid resolution
-GRIDcase = 2;
+GRIDcase = 1;
 if GRIDcase == 1
     N1grid = 100;
     N2grid = 60;
@@ -68,7 +68,7 @@ figure(); hold all; grid on;
 plot(R/1e3,PR,'rx--');
 xlim([0 300]); xlabel('Crash Radius [km]'); ylabel('Probability')
 title(['Estimated Crash Radius for ' acname])
-saveas(gcf,[acname '_CrashDistance.png']);
+saveas(gcf,[acname '_CrashRadius.png']);
 
 %% continuous probability at x=(x1,x2)
     rtil = linspace(0,rint,Nrtil);
@@ -138,32 +138,24 @@ saveas(gcf,[acname '_CrashDistance.png']);
     end
     [Pmove,Ncell] = driftP(S,dt,dV);
 
-    %% propogation steps
-    tVec = (0:dt:Tsim)/3600; %hr
-
+    % propogation steps
+    
     % Probability of escape at t
-    Qt = zeros(Nsim+1,1);
-    % Probability of escape at t from t-1
-    qt = zeros(Nsim,1);
+    qt = zeros(Nsim+1,1);
+    
     for t = 1:Nsim
-        [PP,qt(t)] = next(S,PP,Pmove);
-        Qt(t+1) = Qt(t) + qt(t)*(1-Qt(t)) - Qt(t)*Pmove(2)*3;
+        [PP,qt(t+1)] = next(S,PP,Pmove);
     end
-
-    % for t = 1:Nsim
-    %     [PP,qt(t)] = driftTransition2(S,dt,dV,PP);
-    %     Qt(t+1) = Qt(t) + qt(t)*(1-Qt(t));
-    % end
     %% Location density if no search initiates
     figure(); hold all; grid on;
-    plottwoform(Splot,PP,3);
+    plottwoform(Splot,PP,3); colorbar;
     xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
     title(num2str(Tsim/3600, 'Aircraft Debris Location Density at t=%d hr'));
     saveas(gcf,[acname '_NoSearchDistribution.png']);
     %% Graph of escape probability over time
+    tVec = (0:dt:Tsim)/3600; %hr
     figure(); hold all; grid on;
-    plot(tVec,[0;qt],'-');plot(tVec,Qt,'-')
-    legend('q_t - at each transition','Q_t - cumulative','location','best');
+    plot(tVec,qt,'k-');
     xlabel('Time [hr]'); ylabel('Probability');
     title('Probability of Aircraft Debris Escaping the Search Domain');
     saveas(gcf,[acname '_NoSearchEscape.png']);
