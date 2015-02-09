@@ -67,7 +67,7 @@ end
 figure(); hold all; grid on;
 plot(R/1e3,PR,'rx--');
 xlim([0 300]); xlabel('Crash Radius [km]'); ylabel('Probability')
-title(['Estimated Crash Distance for ' acname])
+title(['Estimated Crash Radius for ' acname])
 saveas(gcf,[acname '_CrashDistance.png']);
 
 %% continuous probability at x=(x1,x2)
@@ -117,7 +117,7 @@ saveas(gcf,[acname '_CrashDistance.png']);
     figure(); hold all; grid on;
     plottwoform(Splot,P,3); colorbar;
     xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
-    title('Probability of Aircraft Debris Location at t=0 hr');
+    title('Aircraft Debris Location Density at t=0 hr');
     hold all;
     traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
     set(traj,'linewidth',2,'markersize',15)
@@ -147,7 +147,7 @@ saveas(gcf,[acname '_CrashDistance.png']);
     qt = zeros(Nsim,1);
     for t = 1:Nsim
         [PP,qt(t)] = next(S,PP,Pmove);
-        Qt(t+1) = Qt(t) + qt(t)*(1-Qt(t));
+        Qt(t+1) = Qt(t) + qt(t)*(1-Qt(t)) - Qt(t)*Pmove(2)*3;
     end
 
     % for t = 1:Nsim
@@ -158,14 +158,14 @@ saveas(gcf,[acname '_CrashDistance.png']);
     figure(); hold all; grid on;
     plottwoform(Splot,PP,3);
     xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
-    title(num2str(Tsim/3600, 'Probability of Aircraft Debris Location at t=%d hr'));
+    title(num2str(Tsim/3600, 'Aircraft Debris Location Density at t=%d hr'));
     saveas(gcf,[acname '_NoSearchDistribution.png']);
     %% Graph of escape probability over time
     figure(); hold all; grid on;
-    plot(tVec,[0;qt],'x--');plot(tVec,Qt,'x--')
-    legend('q_t','Q_t');
+    plot(tVec,[0;qt],'-');plot(tVec,Qt,'-')
+    legend('q_t - at each transition','Q_t - cumulative','location','best');
     xlabel('Time [hr]'); ylabel('Probability');
-    title('Probability of Aircraft Debris Escaped Search Domain');
+    title('Probability of Aircraft Debris Escaping the Search Domain');
     saveas(gcf,[acname '_NoSearchEscape.png']);
 %% Search Agent Data
 
