@@ -182,14 +182,15 @@ heli.FA = .05;
 heli.sig = cdf2sig(heli.Rdetect); %m
 
 %% search agent initial states
-Ns = 1000;
+% number of agents on one side
+Nagent = 100;
 
-Ns/4
+% Initial position
 
 % Ps0 = [S.xnodes(S.getglobalboundarynodes) ...
 %     S.ynodes(S.getglobalboundarynodes)];
 
-%% Detection Probability
+% Detection Probability are assumed to be normal
 mvncdf(x1r,x2r,xs,sig);
 %% Distributed Search Plan (edge first and chase the highest cell)
     Tsim = 96*3600; %s
