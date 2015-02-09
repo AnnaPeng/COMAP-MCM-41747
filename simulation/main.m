@@ -41,10 +41,11 @@ else
 end
 % # of 1D quadrature points (use even number for symm)
 Nquad = 2;
-% boundary distance [-x1 +x1 -x2 +x2]
+% search domain bounds [-x1 +x1 -x2 +x2]
 bdry = [-150 350 -150 150]*1e3; %m
-% reverse probability
+% reversing probability param
 s = .05; q = 1/pi-2*s;
+
 % average debris drift speed
 dV = 10; %m/s
 
@@ -70,103 +71,102 @@ title(['Estimated Crash Distance for ' acname])
 saveas(gcf,[acname '_CrashDistance.png']);
 
 %% continuous probability at x=(x1,x2)
-rtil = linspace(0,rint,Nrtil);
-Rtil = @(x) sqrt(sum((repmat(x,1,Nrtil)-[rtil;zeros(size(rtil))]).^2));
-theta = @(x) abs(atan2(x(2),x(1)-rtil));
-ptheta = @(x) q + theta(x)*(s-q)/pi;
-pdfx = @(x) interp1(R,PR,Rtil(x)).*ptheta(x);
-%% discritized probability at cell (eu,ev)
+    rtil = linspace(0,rint,Nrtil);
+    Rtil = @(x) sqrt(sum((repmat(x,1,Nrtil)-[rtil;zeros(size(rtil))]).^2));
+    theta = @(x) abs(atan2(x(2),x(1)-rtil));
+    ptheta = @(x) q + theta(x)*(s-q)/pi;
+    pdfx = @(x) interp1(R,PR,Rtil(x)).*ptheta(x);
+    %% discritized probability at cell (eu,ev)
 
-% pre-compute gauss-legendre points and weights
-[u,wu] = gaussquad(Nquad);
-[v,wv] = gaussquad(Nquad);
-Nu = nodefun(u);
-Nv = nodefun(v);
+    % pre-compute gauss-legendre points and weights
+    [u,wu] = gaussquad(Nquad);
+    [v,wv] = gaussquad(Nquad);
+    Nu = nodefun(u);
+    Nv = nodefun(v);
 
-% total domain area
-Agrid = (bdry(2)-bdry(1))*(bdry(4)-bdry(3)); %m2
-% grid pt construction
-S = Surface(N1grid,N2grid,bdry);
-P = zeros(S.numelements);
+    % total domain area
+    Agrid = (bdry(2)-bdry(1))*(bdry(4)-bdry(3)); %m2
+    % grid pt construction
+    S = Surface(N1grid,N2grid,bdry);
+    P = zeros(S.numelements);
 
-%% loops
-% note the vertical symmetry!!!
-wv = wv*2;
-for ev=1:S.numelements(2)/2
-    for eu=1:S.numelements(1)
-        for l=1:Nquad/2
-            for k=1:Nquad
-                % pullback quadrature pts coordinate 
-                [x,y] = S.coords(eu,ev,Nu(:,k),Nv(:,l));
-                Ptemp = sum(pdfx([x;y]))*rint/Nrtil;
-                P(eu,ev) = P(eu,ev) + wu(k)*wv(l)*Ptemp;
+    %% loops
+    % note the vertical symmetry!!!
+    wv = wv*2;
+    for ev=1:S.numelements(2)/2
+        for eu=1:S.numelements(1)
+            for l=1:Nquad/2
+                for k=1:Nquad
+                    % pullback quadrature pts coordinate 
+                    [x,y] = S.coords(eu,ev,Nu(:,k),Nv(:,l));
+                    Ptemp = sum(pdfx([x;y]))*rint/Nrtil;
+                    P(eu,ev) = P(eu,ev) + wu(k)*wv(l)*Ptemp;
+                end
             end
         end
+        P(:,S.numelements(2)-ev+1) = P(:,ev);
     end
-    P(:,S.numelements(2)-ev+1) = P(:,ev);
-end
-%% renormalize and save data
-P = P / sum(P(:));
-save(num2str(ACcase,'prior%d.mat'),'P','S');
-% load(num2str(casenum,'prior%d.mat'))
+    %% renormalize and save data
+    P = P / sum(P(:));
+    save(num2str(ACcase,'prior%d.mat'),'P','S');
+    % load(num2str(casenum,'prior%d.mat'))
 
-%% crash probability distribution graph
+    %% crash probability distribution graph
 
-Splot = Surface(N1grid,N2grid,bdry/1e3);
-figure(); hold all; grid on;
-plottwoform(Splot,P,3); colorbar;
-xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
-title('Probability of Aircraft Debris Location at t=0 hr');
-hold all;
-traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
-set(traj,'linewidth',2,'markersize',15)
-saveas(gcf,[acname '_PriorDistribution.png']);
+    Splot = Surface(N1grid,N2grid,bdry/1e3);
+    figure(); hold all; grid on;
+    plottwoform(Splot,P,3); colorbar;
+    xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
+    title('Probability of Aircraft Debris Location at t=0 hr');
+    hold all;
+    traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
+    set(traj,'linewidth',2,'markersize',15)
+    saveas(gcf,[acname '_PriorDistribution.png']);
 
 %% drift/diffusion simulation
-Tsim = 96*3600; %s
+    Tsim = 96*3600; %s
 
-PP = P;
-% update interval that is appropriate
-% i.e. allow only single cell diffusion given grid resolution
-if GRIDcase == 1
-    dt = .1*60*60; %s
-    Nsim = Tsim/dt; %steps
-else
-    dt = .6*60*60; %s
-    Nsim = Tsim/dt; %steps
-end
-Pmove = driftP(S,dt,dV);
+    PP = P;
+    % update interval that is appropriate
+    % i.e. allow only single cell diffusion given grid resolution
+    if GRIDcase == 1
+        dt = .1*60*60; %s
+        Nsim = Tsim/dt; %steps
+    else
+        dt = .4*60*60; %s
+        Nsim = Tsim/dt; %steps
+    end
+    [Pmove,Ncell] = driftP(S,dt,dV);
 
+    %% propogation steps
+    tVec = (0:dt:Tsim)/3600; %hr
 
-tVec = (0:dt:Tsim)/3600; %hr
+    % Probability of escape at t
+    Qt = zeros(Nsim+1,1);
+    % Probability of escape at t from t-1
+    qt = zeros(Nsim,1);
+    for t = 1:Nsim
+        [PP,qt(t)] = next(S,PP,Pmove);
+        Qt(t+1) = Qt(t) + qt(t)*(1-Qt(t));
+    end
 
-% Probability of escape at t
-Qt = zeros(Nsim+1,1);
-% Probability of escape at t from t-1
-qt = zeros(Nsim,1);
-% propogation loop
-for t = 1:Nsim
-    [PP,qt(t)] = next(S,PP,Pmove);
-    Qt(t+1) = Qt(t) + qt(t)*(1-Qt(t));
-end
-
-% for t = 1:Nsim
-%     [PP,qt(t)] = driftTransition2(S,dt,dV,PP);
-%     Qt(t+1) = Qt(t) + qt(t)*(1-Qt(t));
-% end
-%% Location density is no search initiates
-figure(); hold all; grid on;
-plottwoform(Splot,PP,3);
-xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
-title(num2str(Tsim/3600, 'Probability of Aircraft Debris Location at t=%d hr'));
-saveas(gcf,[acname '_NoSearchDistribution.png']);
-%% Graph of escape probability over time
-figure(); hold all; grid on;
-plot(tVec,[0;qt],'x--');plot(tVec,Qt,'x--')
-legend('q_t','Q_t');
-xlabel('Time [hr]'); ylabel('Probability');
-title('Probability of Aircraft Debris Escaped Search Domain');
-saveas(gcf,[acname '_NoSearchEscape.png']);
+    % for t = 1:Nsim
+    %     [PP,qt(t)] = driftTransition2(S,dt,dV,PP);
+    %     Qt(t+1) = Qt(t) + qt(t)*(1-Qt(t));
+    % end
+    %% Location density if no search initiates
+    figure(); hold all; grid on;
+    plottwoform(Splot,PP,3);
+    xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
+    title(num2str(Tsim/3600, 'Probability of Aircraft Debris Location at t=%d hr'));
+    saveas(gcf,[acname '_NoSearchDistribution.png']);
+    %% Graph of escape probability over time
+    figure(); hold all; grid on;
+    plot(tVec,[0;qt],'x--');plot(tVec,Qt,'x--')
+    legend('q_t','Q_t');
+    xlabel('Time [hr]'); ylabel('Probability');
+    title('Probability of Aircraft Debris Escaped Search Domain');
+    saveas(gcf,[acname '_NoSearchEscape.png']);
 %% Search Agent Data
 
 % given 99% detection range find sigma

@@ -132,19 +132,18 @@ if GRIDcase == 1
     dt = .1*60*60; %s
     Nsim = Tsim/dt; %steps
 else
-    dt = .6*60*60; %s
+    dt = .7*60*60; %s
     Nsim = Tsim/dt; %steps
 end
-Pmove = driftP(S,dt,dV);
+[Pmove,Ncell] = driftP(S,dt,dV);
 
-
+%% propogation steps
 tVec = (0:dt:Tsim)/3600; %hr
 
 % Probability of escape at t
 Qt = zeros(Nsim+1,1);
 % Probability of escape at t from t-1
 qt = zeros(Nsim,1);
-% propogation loop
 for t = 1:Nsim
     [PP,qt(t)] = next(S,PP,Pmove);
     Qt(t+1) = Qt(t) + qt(t)*(1-Qt(t));
@@ -163,9 +162,10 @@ saveas(gcf,[acname '_NoSearchDistribution.png']);
 %% Graph of escape probability over time
 figure(); hold all; grid on;
 plot(tVec,[0;qt],'x--');plot(tVec,Qt,'x--')
-xlabel('Time [hr]'); ylabel('Probability  Direction [km]');
-title(num2str(Tsim/3600, 'Probability of Aircraft Debris Location at t=%d hr'));
-saveas(gcf,[acname '_NoSearchDistribution.png']);
+legend('q_t','Q_t');
+xlabel('Time [hr]'); ylabel('Probability');
+title('Probability of Aircraft Debris Escaped Search Domain');
+saveas(gcf,[acname '_NoSearchEscape.png']);
 %% Search Agent Data
 
 % given 99% detection range find sigma

@@ -1,8 +1,8 @@
 function [P,q] = next(S,P,Pmove)
 
-Nmove = numel(Pmove)-1;
+Nmove = numel(Pmove);
 Ppadded = zeros(S.dim+Nmove-1);
-Ppadded(Nmove:(end-Nmove+1),Nmove:(end-Nmove+1)) = P;
+% Ppadded(Nmove:(end-Nmove+1),Nmove:(end-Nmove+1)) = P;
 
 for i = 1:size(P,1)
     for j = 1:size(P,2)

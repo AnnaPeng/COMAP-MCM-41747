@@ -1,4 +1,4 @@
-function [Pmove,Pdiff] = driftP(S,dt,dV)
+function [Pmove,Ncell] = driftP(S,dt,dV)
 
 %% assumes zero knowledge of local drift direction and speed.
 
@@ -20,8 +20,8 @@ for i=2:Nmove-1
     Pmove(i) = normcdf(dd*i,ds,sigma_s) - Pmove(i-1);
 end
 Pmove(end) = 1 - sum(Pmove(1:end-1));
-Pdiff = 8*(1:Nmove)-8;
-Pdiff(1) = 1;
-Pmove = Pmove(:)./Pdiff(:);
+Ncell = 8*(1:Nmove)-8;
+Ncell(1) = 1;
+Pmove = Pmove(:)./Ncell(:);
 
 end
