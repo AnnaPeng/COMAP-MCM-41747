@@ -10,7 +10,9 @@
 \usepackage{setspace}
 \usepackage{float}
 \usepackage[export]{adjustbox}
-%\usepackage{appendix}
+\usepackage{appendix}
+\usepackage{mcode}
+\usepackage{upquote}
 %\input{psfig.sty} % for imported eps files
 \pagestyle{fancy}
 
@@ -93,6 +95,8 @@
 
 
 
+We build from the ground up a computer simulation of a search of missing aircraft.  We populate a rectangular search domain with a grid of cells of location density and define an “enjoyment function” where visitors gain points for going on rides and lose points as they stand in line.  We propose two QuickPass systems.  In the Appointment System, QuickPasses represent an appointment to visit the ride later that day.  In the Placeholder System, a QuickPass represents a virtual place in line.  We then choose test cases to represent both systems and run the computer simulation.  With each set of parameters, we adjust the probability weights that govern visitor behavior to fit a Nash Equilibrium.  The Nash equilibrium adapts the behavior of park visitors to a greedy equilibrium that is not optimal for the group, but is representative of human individuals giving weight to decisions based on what is correlated with giving them an immediate benefit.  
+Our results suggest that it is in the park’s best interest to allocate a high percentage of the rides to QuickPass.  Reserving too few seats on a ride for QuickPass users can result in average visitor enjoyment being lower than if there were no QuickPass system at all.  Both the Placeholder System and the variant of the Appointment System with 75% of ride capacity allocated to QuickPass users show strong increases in visitor enjoyment.  Varying the length of the time window that the QuickPass is valid for has little effect on visitor enjoyment.  
 
 
 
@@ -120,13 +124,8 @@
 %in half by a line that is perpendicular to the statistical best-fit
 %line describing the region's census tracts.
 
-%With the help of a Perl script we are able to parse US Census 2000
-%data, extracting the latitude, longitude, and population count of
-%each census tract. By parsing data at the census tract level instead
-%of the county level, we are able to run our model with high
-%precision.  We run our algorithms on census data from the states of
-%New York as well as Arizona (small), Illinois (medium), and Texas
-%(large).
+We are able to parse past 50 years of aircraft accident
+data, extracting the root cause of the accidents and their typical response (glide, free fall etc.). By parsing these data, we are able to construct distributions of probable crash radius with a relatively high confidence.  We run our algorithms on three different types of aircrafts, G280 (small), B737-900ER (medium), and Airbus 380 (large).
 
 %We compare the results of our methods to each other and to the
 %current districts in the respective states.  Both our algorithms
@@ -169,9 +168,9 @@
 \tableofcontents
 \ \\
 
-%%% Uncomment/Change the appendices below as relevant:
-%\textbf{Appendix A: Full-Page Plots}\\
-%\textbf{Appendix B: Computer Code}
+%% Uncomment/Change the appendices below as relevant:
+\textbf{Appendix A: Computer Code}\\
+\textbf{Appendix B: Full-Page Plots}
 
 
 \newpage
@@ -220,7 +219,7 @@ The challenge in building a search model is the variation in Plane sizes and the
 \item \textbf{The search domain is a $500$km by $300$km rectangle of unobstructed ocean.} This rectangle would cover the whole uncertainty range based on 
 the last known state of the lost aircraft for an interval of 15 minutes to 1 hour based on INMARSAT's "Log-on Interrogation" old and newly recommended standards in light of the MH370 accident\textbf{[citation]}.
 \item \textbf{The missing aircraft is assumed to be still in this domain at $t=0$.} Although escaping the domain at a later time is allowed.
-\item \textbf{The SAR targets remain clustered.} This means that the targets always stay in the same $20$km by $15$km cell on the coarse grid. This assumption is valid as long as the search plan is initiated close to the incident and no serve weather condition causes disturbances.
+\item \textbf{The SAR targets remain clustered.} This means that the targets always stay in the same cell on the discretized grid. This assumption is valid as long as the search is initiated close to the incident time and no serve weather condition causes disturbances.
 \item \textbf{There are buoyant indicator of target location at all time.} Since no underwater search is performed, we assume that either our SAR objective (e.g. survivors, life rafts, parts of crashed debris) remain buoyant throughout our search planning, or our sensor can detect signs of the objectives 
 \item \textbf{The local trajectory of concern is straight}. In addition to the obvious smoothness arguments, it is always possible to apply a conformal transform on the entire search domain to obtain a solution based on a curved trajectory.
 
@@ -268,9 +267,11 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 
 %% Maybe this isn't relevant to your paper or you want to just name this section as "INTRODUCTION".  There's a bit of flexibility as to what you can do now, so name this and the next few sections in whatever way fits the flow of your paper.  If convenient, I personally like to give a bit of scholarly journal background in some of my papers, but we don't do that every year depending on how weird the problems are.
 
-1983 paper
+Stone ... \cite{83stone}
 
-2013 probablitic search book
+Koopman ... \cite{46koopman} Random-search formula
+
+Kagan ... \cite{13kagan}
 
 
 
@@ -319,26 +320,26 @@ In real life the only success criterion is whether we can find the target and ho
 	\begin{figure}[H]
 		\centering
 		\adjincludegraphics[width=0.5\linewidth,trim={{.3\width} {.45\height} {.3\width} {.2\height}},clip]{simulation/LocationDensityExplain.png}
-		\caption{Illustration of the geometry}
+		\caption{Illustration of the accident geometry. The left {\large $\times$} represents the last known location, the right {\large $\times$} first checkpoint where the aircraft was not found. The incident site is marked by the red {\huge $\ast$}, while the crash site is marked by the black {\huge $\ast$}.}
 		\label{fig:CrashRadius}
 	\end{figure}
 \end{center}
 
-%%%% A standard numbered equation that you can later \ref{eqn:firstequation}
+The initial location density at each point away from the intended trajectory is calculated as
 
-%\begin{equation}\label{eqn:firstequation}
+\[P[crash\,at\,\text{\huge $\ast$}] = \int P[crash\,radius=\tilde{R}(\tilde{r})]\cdot P[Deviation=\theta(\tilde{R}(\tilde{r}))]\,d\tilde{r}\]
+
+Finally, the probability that the aircraft crashed within one cell is obtained through the double integral.
+%\begin{equation}\label{eqn:}
 % Type equation as if it were in between $ $ but you don't need the $.
 %\end{equation}
 
 
+%\begin{align*}
+%\end{align*}
 
 %%%% Use & to split columns in align mode.  The * is optional, makes the equation not have a number.  You can have as many &'s per line as needed.
 
-%\begin{align*}
-%Left hand side   &   = Right hand side  \\
-%                 &   = Right hand side on line below it\\
-%                 &   = Final right hand side
-%\end{align*}
 
 
 
@@ -357,7 +358,9 @@ In real life the only success criterion is whether we can find the target and ho
 
 UAV paper
 
-Current SARPOS system (particle filter)
+Current USCG SARPOS system (particle filter)
+
+Group-testing for multiple targets, but static.
 
 %\newpage
 
@@ -485,9 +488,13 @@ grid cell size changes cause varying levels of discretization error.
 
 %\bibitem{NameofItem1}  Author, Initial.  ``Title."  \emph{Journal} \textbf{Volume} (Year) pagestart--pageend.
 
+\bibitem{13kagan}  Kagan, E.;Ben-Gal, I.  ``Probabilistic Search for Tracking Targets: Theory and Modern Applications."  \emph{WILEY} (2013) 19-140.
+
+\bibitem{46koopman}  Koopman, B.O.  ``Search and Screening."  \emph{Operation Evaluation Research Group Report} \textbf{56} (1946) Center for Naval Analysis; See also: ``The Theory of Search, I-III" \emph{Operations Research} (1956) \textbf{4} 324-246; (1956) \textbf{4} 503-531;  (1957) \textbf{5} 613-626. 
+
 %\bibitem{NameofItem2}  NameofOnlineResourceorGovernmentAgency. ``Title.'' \url{http://www2.census.gov/census_2000/datasets/Summary_File_1/New_York/}
 
-%\bibitem{spannmcm}  Gulotta, D; Kane, D; Spann, A.  ``Application of Min-Cost Flow to Airline Accessibility Services."  \emph{UMAP Journal} \textbf{27} (2006): 367--385.
+\bibitem{83stone}  Stone, L. D.  ``The Process of Search Planning: Current Approaches and Continuing Problems."  \emph{Operations Research} \textbf{31(2)} (1983): 207-233.
 
 \end{thebibliography}
 
@@ -501,13 +508,16 @@ grid cell size changes cause varying levels of discretization error.
 
 
 %%%Optional appendix suggestions:  (or you can print these out separately)
-%\newpage
-%\appendix
-%\appendixpage
-%\addappheadtotoc \setcounter{page}{1} \rhead{Appendix Page \thepage\
-%of \pageref{LastPage}}
-%\section{Appendix A: Full-Page Plots}
-%\section{Appendix B: Computer Code}
+\newpage
+\appendix
+\appendixpage
+\addappheadtotoc \setcounter{page}{1} \rhead{Appendix Page \thepage\
+of \pageref{LastPage}}
+\section{Appendix A: Computer Code}
+\singlespacing
+\paragraph{main.m}:
+\lstinputlisting{./simulation/main.m}
+\section{Appendix B: Full-Page Plots}
 
 
 \end{document}
