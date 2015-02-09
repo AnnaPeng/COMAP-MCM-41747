@@ -379,7 +379,14 @@ also multiple agent/single agent etc.
 \section{Experimental Setup}\label{sec:experiment}
 %% State clearly what you are testing.  State your input data and what probability distributions were used in generating it.  Talk a little bit about the implementation of your program (language, if something works a bit differently than the mathematical description you already gave them).  Split into subsections as needed.
 
-grid cell size
+grid cell size changes cause varying levels of discretization error.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{simulation/NoSearchEscapeExplain}
+\caption{Decrease in grid cell resolution causes higher numerical leakage}
+\label{fig:NoSearchEscapeExplain}
+\end{figure}
 
 
 %\newpage

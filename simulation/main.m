@@ -132,16 +132,17 @@ save([acname '_CrashRadius.mat'],'R','PR');
         dt = .4*60*60; %s
         Nsim = Tsim/dt; %steps
     end
-    [Pmove,Ncell] = driftP(S,dt,dV);
+    [Pmove,~] = driftP(S,dt,dV);
 
     % propogation steps
-    
+    tVec = (0:dt:Tsim)/3600; %hr
     % Probability of escape at t
     qt = zeros(Nsim+1,1);
     
     for t = 1:Nsim
         [PP,qt(t+1)] = next(S,PP,Pmove);
     end
+    save(num2str([ACcase GRIDcase],'nosearchEsc%d%d.mat'),'tVec','qt');
     %% Location density if no search initiates
     figure(); hold all; grid on;
     plottwoform(Splot,PP,3); colorbar;
@@ -149,7 +150,6 @@ save([acname '_CrashRadius.mat'],'R','PR');
     title(num2str(Tsim/3600, 'Aircraft Debris Location Density at t=%d hr'));
     saveas(gcf,[acname '_NoSearchDistribution.png']);
     %% Graph of escape probability over time
-    tVec = (0:dt:Tsim)/3600; %hr
     figure(); hold all; grid on;
     plot(tVec,qt,'k-');
     xlabel('Time [hr]'); ylabel('Probability');
