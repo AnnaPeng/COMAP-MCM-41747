@@ -17,4 +17,16 @@ xlim([-1 2]); ylim([-1 1]);
 set(gca,'visible','off');
 saveas(gcf,'LocationDensityExplain.png')
 %%
-figure(2); hold all;
+data1 = dir('*CrashRadius.mat');
+data1 = {data1.name};
+figure(2); hold all; grid on;
+load(data1{1})
+plot(R/1e3,PR);
+load(data1{2})
+plot(R/1e3,PR);
+load(data1{3})
+plot(R/1e3,PR);
+legend('Airbus 380','B737-900ER','G280','location','best')
+xlim([0 300]); xlabel('Crash Radius [km]'); ylabel('Probability')
+title('Estimated Crash Radius Distribution')
+saveas(gcf,'CrashRadiusExplain.png');

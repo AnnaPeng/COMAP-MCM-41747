@@ -8,6 +8,7 @@
                                          %if you prefer LaTex default formatting
 \usepackage{hyperref} %Navigation in TOC and URLs in References
 \usepackage{setspace}
+\usepackage{float}
 %\usepackage{appendix}
 %\input{psfig.sty} % for imported eps files
 \pagestyle{fancy}
@@ -293,6 +294,15 @@ In real life the only success criterion is whether we can find the target and ho
 %% Describe your mathematical model and list all relevant equations.  Remember to make your paper easy to skim by placing variable definitions by all equations.  We prefer to use actual words for variables if that variable will only be used once or twice.  Don't use Greek letters unless your variable is directly analogous to what a Greek letter usually means in math or physics.  Feel free to write important sentences \textbf{in bold} to make your paper easier to skim.
 
 
+\begin{center}
+	\begin{figure}[H]
+		\includegraphics[width=0.9\linewidth]{simulation/CrashRadiusExplain.png}
+		\caption{Estimated Crash Radius Distribution of three types of missing aircraft}
+		\label{fig:CrashRadius}
+	\end{figure}
+\end{center}
+
+
 \subsection{Description}\label{subsecmeth:desc}
 
 %% Maybe you want to split this section into subsections.  Just suggesting things here.  Change as you see fit.  
@@ -303,6 +313,14 @@ In real life the only success criterion is whether we can find the target and ho
 
 %% Here's quick lesson on equations if you need it:
 
+
+\begin{center}
+	\begin{figure}[H]
+		\includegraphics[width=0.9\linewidth]{simulation/LocationDensityExplain.png}
+		\caption{Estimated Crash Radius Distribution of three types of missing aircraft}
+		\label{fig:CrashRadius}
+	\end{figure}
+\end{center}
 
 %%%% A standard numbered equation that you can later \ref{eqn:firstequation}
 
@@ -320,7 +338,6 @@ In real life the only success criterion is whether we can find the target and ho
 %                 &   = Final right hand side
 %\end{align*}
 
-Probability of Escape
 
 
 \subsection{Comparison to Most Interesting Literature Paper}\label{subsec:hess}
@@ -375,19 +392,6 @@ grid cell size
 %%If you don't care about captions or referencing, you only need the %%\includegraphics{} part.
 
 
-%\begin{figure}[!]  %You can do other options besides [!]
-%\begin{center}
-%\includegraphics[height=3.2 in]{filename.png}  %[height=] is optional
-   %If only using LaTeX instead of PDFLaTeX, you might need to use .eps format 
-   %for files and use bounding boxes ([bb]). 
-%%Want to have 2 graphs in one figure? Just add another \includegraphics here   
-%\caption {Give the figure a caption.}
-%\label{fig:firstfigure}
-%\end{center}
-%\end{figure}
-
-
-
 
 
 
@@ -399,7 +403,7 @@ grid cell size
 
 %% As a test for robustness, tweak some of the parameters to your model to see if the results would be substantially impacted.  You might also want to ask some additional sanity check questions based on the data and answer them.
 
-
+Probability of Escape sensitive to grid size. (manifestation of discretization error)
 
 
 %\newpage
