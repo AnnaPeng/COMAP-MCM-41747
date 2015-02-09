@@ -10,7 +10,7 @@
 \usepackage{setspace}
 \usepackage{float}
 \usepackage[export]{adjustbox}
-\usepackage{appendix}
+%\usepackage{appendix}
 \usepackage{mcode}
 \usepackage{upquote}
 %\input{psfig.sty} % for imported eps files
@@ -167,6 +167,9 @@ data, extracting the root cause of the accidents and their typical response (gli
 %Using LaTeX gives you a table of contents for free!
 \tableofcontents
 \ \\
+
+%% Uncomment/Change the appendices below as relevant:
+\textbf{Appendix: Computer Code}\\
 
 \newpage
 
@@ -567,16 +570,15 @@ In Figure \ref{fig:NoSearchEscapeExplain}, it is evident that reduction in cell 
 
 
 %%%Optional appendix suggestions:  (or you can print these out separately)
-\newpage
-\appendix
-\appendixpage
-\addappheadtotoc \setcounter{page}{1} \rhead{Appendix Page \thepage\
-of \pageref{LastPage}}
-\subsection*{Appendix A: Computer Code}
+%\newpage
+%\appendix
+%\appendixpage
+%\addappheadtotoc \setcounter{page}{1} \rhead{Appendix Page \thepage\
+%of \pageref{LastPage}}
+\subsection*{Appendix: Computer Code}
 \singlespacing
 \paragraph{main.m}:
 \lstinputlisting{./simulation/main.m}
-\subsection*{Appendix B: Full-Page Plots}
 
 
 \end{document}
