@@ -204,10 +204,12 @@ determine an efficient and robust way to compute the search plan.
 \item \textbf{SAROPS}. Search and Rescue Optimal Planning System.
 \item \textbf{IMTS}. Informational Moving Target Search.
 
-\item \textbf{Location Density}. Informational Moving Target Search.
-\item \textbf{Search Density}. Informational Moving Target Search.
-\item \textbf{Search Effort}. Informational Moving Target Search.
-\item \textbf{(Detector) Range Law}. Informational Moving Target Search.
+\item \textbf{Location Density}. The probability density function of a target across a 2D domain.
+
+\item \textbf{Search Density}. The probability density function of search effort of a single search agent distributed across a 2D domain.
+
+\item \textbf{Search Effort}. A real number representing the total effort a single search agent applies.
+\item \textbf{(Detector) Range Law}. The probability density function of detection for a search agent on its observable area.
 %and so on
 
 \end{itemize}
@@ -238,8 +240,8 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \ \\
 \textit{\textbf{About Debris Drifting}}
 \begin{itemize}
-\item \textbf{The local drift direction and speed can be accurately modeled as constant within each cell.} Operationally, the resolution of the cells can be adapted to actual drift data.
-\item \textbf{Nothing outside the search domain drifts back into it.} This assumption only makes searching harder so good for us.
+\item \textbf{The local drift direction and speed can be accurately modeled as constant within each cell.} Operationally, the resolution of the cells can be adapted to keep the assumption while also accommodating the actual drift data.
+\item \textbf{Debris drifting outside the search domain do not come back.} This assumption only introduces a small error on the probability of escaping the search domain.
 \end{itemize}
 
 \ \\
