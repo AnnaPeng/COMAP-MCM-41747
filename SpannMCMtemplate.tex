@@ -222,12 +222,12 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \item \textbf{There are buoyant indicator of target location at all time.} Since no underwater search is performed, we assume that either our SAR objective (e.g. survivors, life rafts, parts of crashed debris) remain buoyant throughout our search planning, or our sensor can detect signs of the objectives 
 \item \textbf{The local trajectory of concern is straight}. In addition to the obvious smoothness arguments, it is always possible to apply a conformal transform on the entire search domain to obtain a solution based on a curved trajectory.
 
-\item \textbf{No banking maneuver was made from incident to crash.} This is reasonable for that even in the worse case of gliding due to single engine failure, the average time from initial to of roughly $11$ minutes\textbf{[Citation or see derivation later]}. And this time is not long enough to cause trajectory deviations across different search cells.
+\item \textbf{The trajectory from incident to crash is in a straight line.} Even in the worse case of gliding due to single engine failure, the average time from initial to of roughly $10$ minutes based on our analysis. And during this time any banking maneuver is unlikely to cause significant deviation of the aircraft location density in terms of our discretized cells.
 \item \textbf{Hijacking or on-board navigation system only problems are not the cause of the incident}. This means that we assume the aircraft is crashed and assumes only the dynamics of the ocean and wind in our search domain. Although hijacking incidents account for nearly $20$\% of all accidents in past 50 years \textbf{Citation!}, the search agents in consideration (e.g. low flying aircrafts and surface vessel) are largely useless in finding a rouge cruising plane. Also see Section \ref{sec:restate}.
 \item \textbf{The missing aircraft can be accurately modeled as either G280, Boeing 737-900ER, or Airbus 380.} These three types of aircraft are well-known representatives of small private/business jets, medium range commercial flights, and large international flights. Cruise speed and other aircraft form factors (e.g. Lift to Drag ratio) are derived based on this assumption.
 \item \textbf{The crash radius of the aircraft is only a function of the cause of the incident and the type of the aircraft.} In addition, we assume that the historical distribution of the cause of the accidents is a reasonable prior for the current incident at hand, and it is it is invariant with respect to the type of the aircraft\footnote{We do not have an aircraft aficionado at hand to sift through and separate the accident records based on size}.
-\item \textbf{Aircraft is operating at MTOW}. Assuming they have cargo and passengers 
-\item \textbf{Cruise altitude of all types of aircraft is assumed to be the same}.  Describe/Justify.
+\item \textbf{The crash radius calculations assumes constant air density and constant cruise altitude regarless of the types of aircraft involved.} This is not going to be a significant source of error in comparison to other assumptions.
+\item \textbf{Aircraft is operating at MTOW}. Assuming this is why we absolutely need an optimal search plan to find the cargos and passengers ASAP.
 %%%Add more items as needed
 %%%Add more items as needed
 \end{itemize}
@@ -296,6 +296,18 @@ In real life, the only success criterion is whether we can find the target and h
 
 %% Describe your mathematical model and list all relevant equations.  Remember to make your paper easy to skim by placing variable definitions by all equations.  We prefer to use actual words for variables if that variable will only be used once or twice.  Don't use Greek letters unless your variable is directly analogous to what a Greek letter usually means in math or physics.  Feel free to write important sentences \textbf{in bold} to make your paper easier to skim.
 
+
+Our model uses the probability of each cause of aircraft crash as a premise. This probability comes from our analysis of the data on . For ease of analysis, The causes were then clubbed into four major categories – fire, collision, and engine failure.
+
+First step is to model the probable crash radius of the aircraft in question. To do this, we noted the total number and root cause of commercial aircraft accidents since 1957. From the cruise velocity and cruising altitude of the approximate size of the aircraft as well as the mode of response in reaction to the cause of the accident, we can categorize the data into 4 scenarios: free fall, gliding, impact, and others. (Note: Hijacking and navigation error only incidents were excluded per assumptions. See Section \ref{sec:assumptions}.)
+
+For example, when facing an fire emergency on board, we assume that the airplane would descend in free fall with its initial cruise velocity since it is unlikely that the pilots can initiate significant correction maneuver due to chaos on board.
+
+In
+
+, is considered to be descending in presence of air resistance. For simplicity's sake, the density of air is considered constant and doesn't change with altitude. Furthermore, using the cruise speed of individual aircrafts as the only velocity at the time of the mishap, simple trigonometry along with air resistance calculation leads us to the most probable distance where the debris might have fallen.
+
+Imperfections with our model can always be improved by a more detailed analysis of previous accidents 
 
 \begin{center}
 	\begin{figure}[H]
@@ -543,7 +555,7 @@ In Figure \ref{fig:NoSearchEscapeExplain}, it is evident that reduction in cell 
 
 %\bibitem{NameofItem2}  NameofOnlineResourceorGovernmentAgency. ``Title.'' \url{http://www2.census.gov/census_2000/datasets/Summary_File_1/New_York/}
 
-\bibitem{uav} idk
+\bibitem{uav} 
 
 \bibitem{heli} U.S. Coast Guard Acquisition Directorate. ``Aviation Fact Sheet." \url{http://www.uscg.mil/acquisITION/programs/pdf/air.pdf}
 
