@@ -168,11 +168,6 @@ data, extracting the root cause of the accidents and their typical response (gli
 \tableofcontents
 \ \\
 
-%% Uncomment/Change the appendices below as relevant:
-\textbf{Appendix A: Computer Code}\\
-\textbf{Appendix B: Full-Page Plots}
-
-
 \newpage
 
 % Having completed the summary, now we define the header
@@ -250,7 +245,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \item \textbf{Search agents use either magnetometer or camera as their main detector.}
 \item \textbf{Search agents all have a lateral range function of a bivariate Gaussian as a function of their type, altitude, and speed.} Detection follows Koopman's Random search formula.
 \item \textbf{The probability of false alarm is assumed to be $0$\%.} Lack of exact literature references, industry standard assumption [2013 book]. 
-\item \textbf{The search agents have no knowledge of local drift direction.} Although modern planning softwares used by professional SAR entities (e.g. SARPOS by U.S. Coastal Guards) all have existing database to accommodate real-time ocean drifting, these data are often not precise, not to mention useless on a fictitious geography.
+\item \textbf{The search agents have no knowledge of local drift direction.} Although modern planning softwares used by professional SAR entities (e.g. SAROPS by U.S. Coastal Guards) all have existing database to accommodate real-time ocean drifting, these data are often not precise, not to mention useless on a fictitious geography.
 \item \textbf{Ignore refueling problems.} In operation, search agents can request refueling vehicles etc. and the time is not quite relevant.
 \item \textbf{Agents move either horizontally or vertically.} In operation, search agents can request refueling vehicles etc. and the time is not quite relevant.
 
@@ -343,7 +338,7 @@ Finally, the probability that the aircraft crashed within one cell is obtained t
 
 
 
-\subsection{Comparison to Most Interesting Literature Paper}\label{subsec:hess}
+\subsection{Comparison to U.S.C.G. SAROPS}\label{subsec:sarops}
 
 %% Once again, change the sections as you see fit.  
 
@@ -356,11 +351,16 @@ Finally, the probability that the aircraft crashed within one cell is obtained t
 
 %\section{}\label{labelme}
 
-UAV paper
+In comparison to the direct Monte Carlo / particle filter approach employed by the U.S. Coastal Guards' SAROPS system, our search planning algorithm
+\begin{itemize}
+	\item \textbf{do not use multiple senarios.} due to problem statement;
+	\item \textbf{ss}
+\end{itemize}
 
-Current USCG SARPOS system (particle filter)
 
+\subsection{Comparison to Newer Methods}\label{subsec:newer}
 Group-testing for multiple targets, but static.
+
 
 %\newpage
 
@@ -513,11 +513,11 @@ grid cell size changes cause varying levels of discretization error.
 \appendixpage
 \addappheadtotoc \setcounter{page}{1} \rhead{Appendix Page \thepage\
 of \pageref{LastPage}}
-\section{Appendix A: Computer Code}
+\subsection*{Appendix A: Computer Code}
 \singlespacing
 \paragraph{main.m}:
 \lstinputlisting{./simulation/main.m}
-\section{Appendix B: Full-Page Plots}
+\subsection*{Appendix B: Full-Page Plots}
 
 
 \end{document}
