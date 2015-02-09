@@ -246,8 +246,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \item \textbf{Agents arrive at the boundary of the search domain at $t=0$}.  Search agents are assumed to have arrived on the edge of the search domain at $t=0$.
 \item \textbf{Unlimited bandwidth between search agent communications}.  This is necessary from a planning perspective as to ignore the less than pertinent issues with sensor fusion and coordination. Moreover, this factor is more than likely fixed by the hardware.
 \item \textbf{Search agents are assumed to be either helicopters, UAVs, and surface vessels, all equipped with a bi-variate Gaussian/ definite range law detection probability function.} Moreover, all types of agents are assumed to h Although the problem only mentions "search planes," Marine SAR vessels are very commonly used.
-\item \textbf{Search agents use either magnetometer or camera as their main detector.}
-\item \textbf{Search agents all have a lateral range function of a bivariate Gaussian as a function of their type, altitude, and speed.} Detection follows Koopman's Random search formula.
+\item \textbf{Search agents admit a detector range law of a bivariate Gaussian as a function of their type, altitude, and speed.} Most sensors used for marine SAR (e.g. magnetometer or camera) behaves roughly according to this distribution. Furthermore, the exact sensor range law varies greatly\footnote{We were not able to find good data on this subject} and we can always use actual measured data in operations. And finally, the detection statistics also follows Koopman's Random search formula \cite{46koopman}.
 \item \textbf{The agents all have null probability of false alarm.} According to \cite{83stone} and \cite{13kagan}, this assumption is a standard one employed by the SAR planning industry. It is an reasonable assumption in that usually false alarms for SAR can be resolved quickly and locally (i.e. reexamining the targets are usually an easy task).
 \item \textbf{The search agents have zero knowledge of local ocean/wind drift information.} Although modern planning softwares used by professional SAR entities (e.g. SAROPS by U.S. Coast Guards) all have existing database to accommodate real-time ocean drifting \cite{10uscg}, these data are often not precise, not to mention useless on our fictitious geography.
 \item \textbf{Operational range and refueling problems are neglected.} In operation, search agents can request refueling vehicles etc. and the time is not quite relevant.
@@ -286,7 +285,7 @@ In \cite{13kagan}, Kagan and Ben-Gal composed more recent progress on this old p
 
 %% The problem usually doesn't give you a very specific definition for what the ``best'' solution is, so you should clearly explain it.  Feel free to rename this section something more relevant or use a different style and structure for the paper, just make sure you fulfill the goal of defining what the ``best'' solution looks like.
 
-In real life, the only success criterion is whether we can find the target and how long it takes us to do so. However, from the standpoint of search plan optimization, what we want is to maximize the likelihood of detection given a fixed search effort.
+In real life, the only success criterion is whether we can find the target and how long it takes us to do so. However, from the standpoint of search plan optimization, what we want is \textbf{to maximize the likelihood of detection given a fixed search effort}.
 
 %\newpage
 
