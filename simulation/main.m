@@ -31,7 +31,7 @@ rint = AC.Vc*interval; %m
 % continuous probability (rtil) riemann sum resolution
 Nrtil = 50;
 % grid resolution
-GRIDcase = 1;
+GRIDcase = 2;
 if GRIDcase == 1
     N1grid = 100;
     N2grid = 60;
@@ -45,6 +45,8 @@ Nquad = 2;
 bdry = [-150 350 -150 150]*1e3; %m
 % reverse probability
 s = .05; q = 1/pi-2*s;
+% average debris drift speed
+dV = 10; %m/s
 
 %% incident to crash range pdf
 
@@ -127,28 +129,44 @@ PP = P;
 % update interval that is appropriate
 % i.e. allow only single cell diffusion given grid resolution
 if GRIDcase == 1
-    dt = .5*60*60; %s
-    Nsim = Tsim/dt; %steps
-else
     dt = .1*60*60; %s
     Nsim = Tsim/dt; %steps
+else
+    dt = .6*60*60; %s
+    Nsim = Tsim/dt; %steps
 end
-% average debris drift speed
-dV = 10; %m/s
-% escape/out of range probability
-Pescape = 0;
+Pmove = driftP(S,dt,dV);
 
+
+tVec = (0:dt:Tsim)/3600; %hr
+
+% Probability of escape at t
+Qt = zeros(Nsim+1,1);
+% Probability of escape at t from t-1
+qt = zeros(Nsim,1);
 % propogation loop
-for tstep = 1:Nsim
-    [PP,temp] = driftTransition2(S,dt,dV,PP);
-    Pescape = Pescape+temp;
+for t = 1:Nsim
+    [PP,qt(t)] = next(S,PP,Pmove);
+    Qt(t+1) = Qt(t) + qt(t)*(1-Qt(t));
 end
+
+% for t = 1:Nsim
+%     [PP,qt(t)] = driftTransition2(S,dt,dV,PP);
+%     Qt(t+1) = Qt(t) + qt(t)*(1-Qt(t));
+% end
+%% Location density is no search initiates
 figure(); hold all; grid on;
 plottwoform(Splot,PP,3);
 xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
 title(num2str(Tsim/3600, 'Probability of Aircraft Debris Location at t=%d hr'));
 saveas(gcf,[acname '_NoSearchDistribution.png']);
-
+%% Graph of escape probability over time
+figure(); hold all; grid on;
+plot(tVec,[0;qt],'x--');plot(tVec,Qt,'x--')
+legend('q_t','Q_t');
+xlabel('Time [hr]'); ylabel('Probability');
+title('Probability of Aircraft Debris Escaped Search Domain');
+saveas(gcf,[acname '_NoSearchEscape.png']);
 %% Search Agent Data
 
 % given 99% detection range find sigma
@@ -182,11 +200,11 @@ Ns = 1000;
 mvncdf(x1r,x2r,xs,sig);
 %% Distributed Search Plan (edge first)
 
-Pescape = 0;
+Qt = 0;
 % propogation loop
-for tstep = 1:Nsim
+for t = 1:Nsim
     [PP,temp] = driftTransition2(S,dt,dV,PP);
-    Pescape = Pescape+temp;
+    Qt = Qt+temp;
     update 
 end
 

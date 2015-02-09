@@ -1,6 +1,6 @@
-function [P,Pescape] = driftTransition2(S,dt,dV,P)
+function [P,Pescape,Pstay] = driftTransition2(S,dt,dV,P)
 
-%% assumes zero knowledge of local drift direction and speed.
+% assumes zero knowledge of local drift direction and speed.
 
 % average debris drift speed
 ds = dV*dt; %m
@@ -37,9 +37,11 @@ for i = 1:size(P,1)
     end
 end
 
-P = Ppadded(2:(end-1),2:(end-1));
+P = Ppadded(Nmove:(end-Nmove+1),Nmove:(end-Nmove+1));
 % renormalization
 P = P./sum(P(:));
-Pescape = sum(sum(Ppadded([1 end],:))) + sum(sum(Ppadded(:,[1 end])));
+Pescape = sum(sum(Ppadded([1:Nmove-1 (end-Nmove+1):end],:))) + ...
+    sum(sum(Ppadded(:,[1:Nmove-1 (end-Nmove+1):end])));
 
+Pstay = Ppadded(
 end
