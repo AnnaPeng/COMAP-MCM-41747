@@ -192,14 +192,16 @@ The challenge in building a search model is the variation in Plane sizes and the
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Uncomment if needed
-\section{Terminologies and Conventions}\label{sec:terms}
+\section{Acronyms}\label{sec:terms}
 
 \begin{itemize}
 \item \textbf{SAR}. Search-And-Rescue.
 
 \item \textbf{MTOW}. Maximum Take Off Weight.
 
-\item \textbf{$\tilde{r}$}. Distance between point of last contact and point of incident.
+\item \textbf{USCG}. United States Coast Guards.
+\item \textbf{SAROPS}. Search and Rescue Optimal Planning System.
+\item \textbf{IMTS}. Informational Moving Target Search.
 
 %and so on
 
@@ -211,7 +213,7 @@ The challenge in building a search model is the variation in Plane sizes and the
 
 \textit{\textbf{About the Search Domain and the Missing Aircraft}}
 \begin{itemize}
-\item \textbf{The search domain is a $500$km by $300$km rectangle of unobstructed ocean.} This rectangle would cover the whole uncertainty range based on 
+\item \textbf{The search domain $\Omega$ is a $500$km by $300$km rectangle of unobstructed ocean.} This rectangle would cover the whole uncertainty range based on 
 the last known state of the lost aircraft for an interval of 15 minutes to 1 hour based on INMARSAT's "Log-on Interrogation" old and newly recommended standards in light of the MH370 accident\textbf{[citation]}.
 \item \textbf{The missing aircraft is assumed to be still in this domain at $t=0$.} Although escaping the domain at a later time is allowed.
 \item \textbf{The SAR targets remain clustered.} This means that the targets always stay in the same cell on the discretized grid. This assumption is valid as long as the search is initiated close to the incident time and no serve weather condition causes disturbances.
@@ -241,13 +243,14 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \item \textbf{All agents are commanded and controlled by the central planner at each update interval.} No command and control overhead is assumed for the sake of simplicity.
 \item \textbf{Agents arrive at the boundary of the search domain at $t=0$}.  Search agents are assumed to have arrived on the edge of the search domain at $t=0$.
 \item \textbf{Unlimited bandwidth between search agent communications}.  This is necessary from a planning perspective as to ignore the less than pertinent issues with sensor fusion and coordination. Moreover, this factor is more than likely fixed by the hardware.
-\item \textbf{Types of search agents considered are helicopter, fixed wing UAVs, and surface vessels.} Although the problem only mentions "search planes," it is very common to have sur
+\item \textbf{Search agents are assumed to be either helicopters, UAVs, and surface vessels, all equipped with a bi-variate Gaussian/ definite range law detection probability function.} Moreover, all types of agents are assumed to h Although the problem only mentions "search planes," Marine SAR vessels are very commonly used.
 \item \textbf{Search agents use either magnetometer or camera as their main detector.}
 \item \textbf{Search agents all have a lateral range function of a bivariate Gaussian as a function of their type, altitude, and speed.} Detection follows Koopman's Random search formula.
-\item \textbf{The probability of false alarm is assumed to be $0$\%.} Lack of exact literature references, industry standard assumption [2013 book]. 
-\item \textbf{The search agents have no knowledge of local drift direction.} Although modern planning softwares used by professional SAR entities (e.g. SAROPS by U.S. Coastal Guards) all have existing database to accommodate real-time ocean drifting, these data are often not precise, not to mention useless on a fictitious geography.
-\item \textbf{Ignore refueling problems.} In operation, search agents can request refueling vehicles etc. and the time is not quite relevant.
-\item \textbf{Agents move either horizontally or vertically.} In operation, search agents can request refueling vehicles etc. and the time is not quite relevant.
+\item \textbf{The agents all have null probability of false alarm.} According to \cite{83stone} and \cite{13kagan}, this assumption is a standard one employed by the SAR planning industry. It is an reasonable assumption in that usually false alarms for SAR can be resolved quickly and locally (i.e. reexamining the targets are usually an easy task).
+\item \textbf{The search agents have zero knowledge of local ocean/wind drift information.} Although modern planning softwares used by professional SAR entities (e.g. SAROPS by U.S. Coast Guards) all have existing database to accommodate real-time ocean drifting \cite{10uscg}, these data are often not precise, not to mention useless on our fictitious geography.
+\item \textbf{Operational range and refueling problems are neglected.} In operation, search agents can request refueling vehicles etc. and the time is not quite relevant.
+\item \textbf{Agents move in either the horizontal or vertical direction.} Although this is clearly not so realistic operationally, we can always approximate the real search trajectories better by increasing grid resolution.
+\item \textbf{Search agent trajectories are known and executed exactly.} This assumption is alliveated by the fact that we do not assume a definite range law.
 
 %%%Add more items as needed
 \end{itemize}
@@ -335,6 +338,29 @@ Finally, the probability that the aircraft crashed within one cell is obtained t
 
 %%%% Use & to split columns in align mode.  The * is optional, makes the equation not have a number.  You can have as many &'s per line as needed.
 
+Let us recall the deﬁnitions and notation which were applied in the search and screening
+methods (Section 2.1.1). Assume that the sample space X ={x1,x2,...,xn} represents a
+rectangular geographical domain of size (n1,n2), n = n1 × n2, and the points xi ∈ X, i =
+1, 2,...,n, represent the cells in which the target can be located at any time t = 0, 1, 2,....
+As indicated above, we index the points of X in a linear order such that for the Cartesian
+coordinates (j1,j2) of the point xi, its index is given by i = ((j1 − 1)n1 + j2), where
+j1 = 1,...,n1 and j2 = 1,...,n2.
+The target location probabilities at time t, t = 0, 1, 2,..., are denoted by pt(xi) =
+Pr{xt = xi}, i = 1, 2,...,n, where xt ∈ X denotes the target location at time t. As usual,
+we assume that 0 ≤ pt(xi) ≤ 1 and
+鬀n
+i=1 pt(xi) = 1. The target’s movement is governed
+by a discrete Markov process with transition probability matrix ρ ==ρij靀n×n, where ρij =
+Pr{xt+1 = xj|xt = xi} and 鷀jn=1 ρij = 1 for each i = 1,2,...,n.Ifmatrixρ is a unit
+matrix, then the target is static, otherwise we say that it is moving. Given target loca-
+tion probabilities pt(x), x ∈ X, at time t, location probabilities at the next time t + 1are
+calculated as pt+1(xi) = 鍰jn=1 ρij pt(xi), i = 1, 2,...,n.
+The searcher moves over the sample space and at each time t, t = 0, 1, 2,..., looks
+for a target by testing a neighboring observed area At ⊂ X of a certain radius r>0, which
+is deﬁned by using the metric of the considered geographical domain. Similar to the Singh
+and Krishnamurthy model (see Section 3.3.1), we do not restrict the size of the available
+observed areas, but assume that the areas have equal size and the trajectory of the searcher
+is continuous, as shown in Figure 2.7.
 
 
 
@@ -351,30 +377,43 @@ Finally, the probability that the aircraft crashed within one cell is obtained t
 
 %\section{}\label{labelme}
 
-In comparison to the direct Monte Carlo / particle filter approach employed by the U.S. Coastal Guards' SAROPS system, our search planning algorithm
+In comparison to the direct Monte Carlo / particle filter approach employed by the U.S. Coast Guards' SAROPS system, our search planning algorithm
 \begin{itemize}
-	\item \textbf{do not use multiple senarios.} due to problem statement;
+	\item \textbf{do not use multiple senarios.} due to problem statement; More see \ref{sec:assumptions}
 	\item \textbf{ss}
 \end{itemize}
 
 
-\subsection{Comparison to Newer Methods}\label{subsec:newer}
-Group-testing for multiple targets, but static.
+\subsection{Comparison to SLS Methods}\label{subsec:newer}
+
 
 
 %\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Comparison to a "Steepest Decent" Search Plan}\label{sec:greedyalg}
+\section{Comparison to a Parallel Search Plan}\label{sec:greedyalg}
 
 %%% Besides your main model, always have a ``control'' algorithm to compare to.  It's even better if you can think of an extra ``good'' algorithm as well.  
 
+Naively, one can also devise the classic parallel search plan where the search agents travel in parallel lines that each agent's observed area overlaps. Such a plan is analyzed in fair amount of detail by Stone in \cite{83stone}. In our crude simulation, we assume that the trajectory of the search agents are known and executed exactly
 
 
-also multiple agent/single agent etc.
 
 
 
+
+%\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{Comparison to a "Steepest Decent" Search Plan}\label{sec:greedyalg}
+%
+%%%% Besides your main model, always have a ``control'' algorithm to compare to.  It's even better if you can think of an extra ``good'' algorithm as well.  
+%
+%
+%
+%also multiple agent/single agent etc.
+%
+%
+%
 
 %\newpage
 
@@ -417,6 +456,7 @@ grid cell size changes cause varying levels of discretization error.
 	\end{figure}
 \end{center}
 
+In Figure \ref{fig:NoSearchEscapeExplain}, it is evident that reduction in cell resolution causes the Markov drifting simulation leakage.
 
 %\newpage
 
@@ -436,7 +476,7 @@ grid cell size changes cause varying levels of discretization error.
 \ \\
 \noindent \textit{Weaknesses:}
 \begin{itemize}
-\item \textbf{Require a fine grid resolution for realistic results}. Excessive discretization can cause unwanted error in total escape probability. See \ref{sec:sensitive} and \ref{fig:NoSearchEscapeExplain}.
+\item \textbf{Require a fine grid resolution for realistic results}. Excessive discretization can cause unwanted error in total escape probability. See Section \ref{sec:sensitive} and Figure \ref{fig:NoSearchEscapeExplain}.
 \item \textbf{}.  Description.
 \item \textbf{very simplified drift modeling}.  Description.
 \item \textbf{Short bullet point}.  Description.
@@ -465,12 +505,11 @@ grid cell size changes cause varying levels of discretization error.
 \item \textbf{Recommendation 3}.  Why the data says so.
 \item \textbf{Recommendation 4}.  Why the data says so.
 % Exact Number of recommendations isn't important
+\item \textbf{Make Sure to form a team of search agents that would not give up the search half way}.  One person contributing is $\lll$ two person $\lll$ three person, etc.
 \end{itemize}
 
 
 
-
-%%One Person is << Two Person << Three Person
 
 %%Uncomment below if you want to begin the next section on a newpage:
 %\newpage
@@ -488,13 +527,17 @@ grid cell size changes cause varying levels of discretization error.
 
 %\bibitem{NameofItem1}  Author, Initial.  ``Title."  \emph{Journal} \textbf{Volume} (Year) pagestart--pageend.
 
-\bibitem{13kagan}  Kagan, E.;Ben-Gal, I.  ``Probabilistic Search for Tracking Targets: Theory and Modern Applications."  \emph{WILEY} (2013) 19-140.
+\bibitem{10uscg} Kratzke, T.M.; Stone, L.D.; Frost, J.R. ``Search and Rescue Optimal Planning System" \emph{Information Fusion (FUSION), 2010 13th Conference on} \textbf{DOI:10.1109/ICIF.2010.5712114} 
+(2010) 1-8 
+
+\bibitem{83stone}  Stone, L. D.  ``The Process of Search Planning: Current Approaches and Continuing Problems."  \emph{Operations Research} \textbf{31(2)} (1983): 207-233.
 
 \bibitem{46koopman}  Koopman, B.O.  ``Search and Screening."  \emph{Operation Evaluation Research Group Report} \textbf{56} (1946) Center for Naval Analysis; See also: ``The Theory of Search, I-III" \emph{Operations Research} (1956) \textbf{4} 324-246; (1956) \textbf{4} 503-531;  (1957) \textbf{5} 613-626. 
 
+\bibitem{13kagan}  Kagan, E.;Ben-Gal, I.  ``Probabilistic Search for Tracking Targets: Theory and Modern Applications."  \emph{WILEY} (2013) 19-313.
+
 %\bibitem{NameofItem2}  NameofOnlineResourceorGovernmentAgency. ``Title.'' \url{http://www2.census.gov/census_2000/datasets/Summary_File_1/New_York/}
 
-\bibitem{83stone}  Stone, L. D.  ``The Process of Search Planning: Current Approaches and Continuing Problems."  \emph{Operations Research} \textbf{31(2)} (1983): 207-233.
 
 \end{thebibliography}
 

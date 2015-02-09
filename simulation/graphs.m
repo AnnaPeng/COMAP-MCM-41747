@@ -38,11 +38,11 @@ saveas(gcf,'CrashRadiusExplain.png');
 data = dir('nosearchEsc1*.mat');
 data = {data.name};
 figure(); hold all; grid on;
-load(data{1})
-plot(tVec,qt);
 load(data{2})
 plot(tVec,qt);
-legend('5x5[km^2] Grid','20x15[km^2] Grid','location','northwest')
-ylim([0 1]); xlabel('Tiem [hr]'); ylabel('Probability')
+load(data{1})
+plot(tVec,qt);
+legend('20x15[km^2] Grid','5x5[km^2] Grid','location','northwest')
+ylim([0 1]); xlabel('Time [hr]'); ylabel('Probability')
 title('Probability of Aircraft Debris Escaping the Search Domain')
 saveas(gcf,'NoSearchEscapeExplain.png');
