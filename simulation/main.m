@@ -15,7 +15,7 @@ G280.R = [10 20 135 56]*1e3; %m
 %% Assumptions/parameters
 
 % target aircraft make
-ACcase = 1;
+ACcase = 2;
 if ACcase == 1
     AC = B737; acname = 'B737-900ER';
 elseif ACcase == 2
@@ -31,7 +31,7 @@ rint = AC.Vc*interval; %m
 % continuous probability (rtil) riemann sum resolution
 Nrtil = 50;
 % grid resolution
-GRIDcase = 2;
+GRIDcase = 1;
 if GRIDcase == 1
     N1grid = 100;
     N2grid = 60;
@@ -104,8 +104,8 @@ save([acname '_CrashRadius.mat'],'R','PR');
     end
     %% renormalize and save data
     P = P / sum(P(:));
-    save(num2str(ACcase,'prior%d.mat'),'P','S');
-    % load(num2str(casenum,'prior%d.mat'))
+    save(num2str([ACcase GRIDcase],'prior%d%d.mat'),'P','S');
+    % load(num2str([ACcase GRIDcase],'prior%d%d.mat'))
 
     %% crash probability distribution graph
 
@@ -117,7 +117,7 @@ save([acname '_CrashRadius.mat'],'R','PR');
     hold all;
     traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
     set(traj,'linewidth',2,'markersize',15)
-    saveas(gcf,[acname '_PriorDistribution.png']);
+    saveas(gcf,num2str(GRIDcase,[acname '_PriorDistribution%d.png']));
 
 %% drift/diffusion simulation
     Tsim = 96*3600; %s
@@ -148,13 +148,13 @@ save([acname '_CrashRadius.mat'],'R','PR');
     plottwoform(Splot,PP,3); colorbar;
     xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
     title(num2str(Tsim/3600, 'Aircraft Debris Location Density at t=%d hr'));
-    saveas(gcf,[acname '_NoSearchDistribution.png']);
+    saveas(gcf,num2str(GRIDcase,[acname '_NoSearchDistribution%d.png']));
     %% Graph of escape probability over time
     figure(); hold all; grid on;
     plot(tVec,qt,'k-');
     xlabel('Time [hr]'); ylabel('Probability');
     title('Probability of Aircraft Debris Escaping the Search Domain');
-    saveas(gcf,[acname '_NoSearchEscape.png']);
+    saveas(gcf,num2str(GRIDcase,[acname '_NoSearchEscape%d.png']));
 %% Search Agent Data
 
 % given 99% detection range find sigma
@@ -174,8 +174,8 @@ UAV.alt = 5e3; %m
 UAV.FA = .05;
 UAV.sig = cdf2sig(UAV.Rdetect); %m
 
-% Helicoptor (USCG Dolphin MH65C range= 650km+)
-heli.Vs = 90; %m/s
+% Helicoptor (USCG Dolphin MH65C range= 280km+)
+heli.Vs = 82; %m/s
 heli.Rdetect = 5e3; %m
 heli.alt = 5.5e3; %m
 heli.FA = .05;

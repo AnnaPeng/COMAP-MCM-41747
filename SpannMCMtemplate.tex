@@ -181,13 +181,11 @@ data, extracting the root cause of the accidents and their typical response (gli
 \section{Problem Restatement}\label{sec:restate}
 %% One quick paragraph describing the problem and foreshadowing your approach.
 
+Concerns over the disappearance of flight MH370 have rekindled interests on how to devise an optimal search plan to maximize our chance at finding the debris of an aircraft lost in a vast open body of water. Given the last known state of the aircraft, we wish to construct a probability distribution of the aircraft debris to and then a search plan that can assist the search-and-rescue teams in allocation of their efforts. Since we fear that the plane have been crashed, we assume no signals can be received from the lost plane, and we ignore the possibility that no foul-play or navigation error could be the only cause for lost of contact with the aircraft.
 
-Pursuit of a lost plane:
-
-The disappearance of flight MH370 kindled a long debate and serious introspection. The methods used for hunting the plane came into serious questioning when even after months, the searchers were no closer to discovering the plane or its debris. 
-The problem asks to Build a generic mathematical model that could assist "searchers" in planning a useful search for a lost plane feared to have crashed in open water such as the Atlantic, Pacific, Indian, Southern, or Arctic Ocean while flying from Point A to Point B. Like in the case of MH370, we arent receiving any signal from the plane that is feared to have crashed. 
-
-The challenge in building a search model is the variation in Plane sizes and the different search techniques used. The problem requires to account for both.
+The specific factors that should be taken into account in obtaining such optimal search plan
+include the variation in the type of crashed airplane and that of the search agents. Furthermore, we must first determine what constitutes the optimality of a search plan. Once the objective function is determined, the planning problem now turns into one of the optimization and we must
+determine an efficient and robust way to compute the search plan.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -225,7 +223,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \item \textbf{The local trajectory of concern is straight}. In addition to the obvious smoothness arguments, it is always possible to apply a conformal transform on the entire search domain to obtain a solution based on a curved trajectory.
 
 \item \textbf{No banking maneuver was made from incident to crash.} This is reasonable for that even in the worse case of gliding due to single engine failure, the average time from initial to of roughly $11$ minutes\textbf{[Citation or see derivation later]}. And this time is not long enough to cause trajectory deviations across different search cells.
-\item \textbf{Hijacking or on-board navigation system only problems are not the cause of the incident}. Although hijacking incidents account for nearly $20$\% of all accidents in past 50 years \textbf{Citation!}, SAR plane (or vessel) detectors are largely useless in finding a cruising rouge plane. Also see problem restatement.
+\item \textbf{Hijacking or on-board navigation system only problems are not the cause of the incident}. This means that we assume the aircraft is crashed and assumes only the dynamics of the ocean and wind in our search domain. Although hijacking incidents account for nearly $20$\% of all accidents in past 50 years \textbf{Citation!}, the search agents in consideration (e.g. low flying aircrafts and surface vessel) are largely useless in finding a rouge cruising plane. Also see Section \ref{sec:restate}.
 \item \textbf{The missing aircraft can be accurately modeled as either G280, Boeing 737-900ER, or Airbus 380.} These three types of aircraft are well-known representatives of small private/business jets, medium range commercial flights, and large international flights. Cruise speed and other aircraft form factors (e.g. Lift to Drag ratio) are derived based on this assumption.
 \item \textbf{The crash radius of the aircraft is only a function of the cause of the incident and the type of the aircraft.} In addition, we assume that the historical distribution of the cause of the accidents is a reasonable prior for the current incident at hand, and it is it is invariant with respect to the type of the aircraft\footnote{We do not have an aircraft aficionado at hand to sift through and separate the accident records based on size}.
 \item \textbf{Aircraft is operating at MTOW}. Assuming they have cargo and passengers 
@@ -269,11 +267,12 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 
 %% Maybe this isn't relevant to your paper or you want to just name this section as "INTRODUCTION".  There's a bit of flexibility as to what you can do now, so name this and the next few sections in whatever way fits the flow of your paper.  If convenient, I personally like to give a bit of scholarly journal background in some of my papers, but we don't do that every year depending on how weird the problems are.
 
-Stone ... \cite{83stone}
+The problem of finding the optimal search strategy of a target in a fixed region like a body of water, known in the literature as the ``Search and Screening Problem" had been extensively researched and analyzed by generations of researchers of operational research. First aroused as a naval problem, Koopman \cite{46koopman} established the foundation on how to approach this problem. In his seminal papers, many reasonable assumptions as well as useful probability functions and formulas (e.g. the random-search formula) are devised and still in use today.
 
-Koopman ... \cite{46koopman} Random-search formula
+Stone analyzed the overall development of this field up to 1983 in \cite{83stone}.
 
-Kagan ... \cite{13kagan}
+
+In \cite{13kagan}, Kagan and Ben-Gal composed more recent progress on this old problem. The optimal search plan algorithm used later in this paper is derived from their IMTS methods.
 
 
 
@@ -287,12 +286,12 @@ Kagan ... \cite{13kagan}
 
 %% The problem usually doesn't give you a very specific definition for what the ``best'' solution is, so you should clearly explain it.  Feel free to rename this section something more relevant or use a different style and structure for the paper, just make sure you fulfill the goal of defining what the ``best'' solution looks like.
 
-In real life the only success criterion is whether we can find the target and how long it takes us to do so. However, from the standpoint of search plan optimization, what we want is to maximize the likelihood of detection given a fixed search effort.
+In real life, the only success criterion is whether we can find the target and how long it takes us to do so. However, from the standpoint of search plan optimization, what we want is to maximize the likelihood of detection given a fixed search effort.
 
 %\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Describe Your Method}\label{sec:mainmethod}
+\section{Debris Density and Search Planning}\label{sec:mainmethod}
 %% (Change the section title of course)
 
 %% Describe your mathematical model and list all relevant equations.  Remember to make your paper easy to skim by placing variable definitions by all equations.  We prefer to use actual words for variables if that variable will only be used once or twice.  Don't use Greek letters unless your variable is directly analogous to what a Greek letter usually means in math or physics.  Feel free to write important sentences \textbf{in bold} to make your paper easier to skim.
@@ -425,6 +424,8 @@ Naively, one can also devise the classic parallel search plan where the search a
 \section{Experimental Setup}\label{sec:experiment}
 %% State clearly what you are testing.  State your input data and what probability distributions were used in generating it.  Talk a little bit about the implementation of your program (language, if something works a bit differently than the mathematical description you already gave them).  Split into subsections as needed.
 
+By changing the type of lost plane, we can notice the difference in prior distribution.
+
 
 %\newpage
 
@@ -542,6 +543,12 @@ In Figure \ref{fig:NoSearchEscapeExplain}, it is evident that reduction in cell 
 
 %\bibitem{NameofItem2}  NameofOnlineResourceorGovernmentAgency. ``Title.'' \url{http://www2.census.gov/census_2000/datasets/Summary_File_1/New_York/}
 
+\bibitem{uav} idk
+
+\bibitem{heli} U.S. Coast Guard Acquisition Directorate. ``Aviation Fact Sheet." \url{http://www.uscg.mil/acquisITION/programs/pdf/air.pdf}
+
+\bibitem{vessel} Damen Shipyards, ``NH 1816: a New Type of Search and Rescue boat for KNRM" \emph{Maritime by Holland} (2014) \textbf{63} 41-43
+\url{http://products.damen.com/~/media/Products/Images/Clusters\%20groups/High\%20Speed\%20Crafts/Search\%20and\%20Rescue\%20Vessel\%201906/Documents/Maritime_by_Holland_2014_Magazine.ashx}
 
 \end{thebibliography}
 
