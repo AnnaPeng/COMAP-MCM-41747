@@ -191,7 +191,7 @@ Nagent = 100;
 %     S.ynodes(S.getglobalboundarynodes)];
 
 % Detection Probability are assumed to be normal
-mvncdf(x1r,x2r,xs,sig);
+kd = mvncdf(x1r,x2r,xs,sig);
 %% Distributed Search Plan (edge first and chase the highest cell)
     Tsim = 96*3600; %s
 

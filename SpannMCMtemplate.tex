@@ -95,8 +95,9 @@
 
 
 
-We build from the ground up a computer simulation of a search of missing aircraft.  We populate a rectangular search domain with a grid of cells of location density and define an “enjoyment function” where visitors gain points for going on rides and lose points as they stand in line.  We propose two QuickPass systems.  In the Appointment System, QuickPasses represent an appointment to visit the ride later that day.  In the Placeholder System, a QuickPass represents a virtual place in line.  We then choose test cases to represent both systems and run the computer simulation.  With each set of parameters, we adjust the probability weights that govern visitor behavior to fit a Nash Equilibrium.  The Nash equilibrium adapts the behavior of park visitors to a greedy equilibrium that is not optimal for the group, but is representative of human individuals giving weight to decisions based on what is correlated with giving them an immediate benefit.  
-Our results suggest that it is in the park’s best interest to allocate a high percentage of the rides to QuickPass.  Reserving too few seats on a ride for QuickPass users can result in average visitor enjoyment being lower than if there were no QuickPass system at all.  Both the Placeholder System and the variant of the Appointment System with 75% of ride capacity allocated to QuickPass users show strong increases in visitor enjoyment.  Varying the length of the time window that the QuickPass is valid for has little effect on visitor enjoyment.  
+We build from the ground up a computer simulation of a search of missing aircraft. 
+% We populate a rectangular search domain with a grid of cells of location density and define an “enjoyment function” where visitors gain points for going on rides and lose points as they stand in line.  We propose two QuickPass systems.  In the Appointment System, QuickPasses represent an appointment to visit the ride later that day.  In the Placeholder System, a QuickPass represents a virtual place in line.  We then choose test cases to represent both systems and run the computer simulation.  With each set of parameters, we adjust the probability weights that govern visitor behavior to fit a Nash Equilibrium.  The Nash equilibrium adapts the behavior of park visitors to a greedy equilibrium that is not optimal for the group, but is representative of human individuals giving weight to decisions based on what is correlated with giving them an immediate benefit.  
+%Our results suggest that it is in the park’s best interest to allocate a high percentage of the rides to QuickPass.  Reserving too few seats on a ride for QuickPass users can result in average visitor enjoyment being lower than if there were no QuickPass system at all.  Both the Placeholder System and the variant of the Appointment System with 75% of ride capacity allocated to QuickPass users show strong increases in visitor enjoyment.  Varying the length of the time window that the QuickPass is valid for has little effect on visitor enjoyment.  
 
 
 
@@ -125,7 +126,11 @@ Our results suggest that it is in the park’s best interest to allocate a high 
 %line describing the region's census tracts.
 
 We are able to parse past 50 years of aircraft accident
-data, extracting the root cause of the accidents and their typical response (glide, free fall etc.). By parsing these data, we are able to construct distributions of probable crash radius with a relatively high confidence.  We run our algorithms on three different types of aircrafts, G280 (small), B737-900ER (medium), and Airbus 380 (large).
+data, extracting the root cause of the accidents and their typical response (glide, free fall etc.). By parsing these data, we are able to construct distributions of probable crash radius with a relatively high confidence.  We run our algorithms on three different types of aircrafts, G280 (small), B737-900ER (medium), and Airbus 380 (large). 
+
+We assumes three types of search agents, UAV, helicopter, and marine surface vessels with variable detector statistics.
+
+We attempted to use an algorithm based on statistical local search to optimize the search plan for each agent \cite{13kagan}.
 
 %We compare the results of our methods to each other and to the
 %current districts in the respective states.  Both our algorithms
@@ -184,7 +189,7 @@ data, extracting the root cause of the accidents and their typical response (gli
 \section{Problem Restatement}\label{sec:restate}
 %% One quick paragraph describing the problem and foreshadowing your approach.
 
-Concerns over the disappearance of flight MH370 have rekindled interests on how to devise an optimal search plan to maximize our chance at finding the debris of an aircraft lost in a vast open body of water. Given the last known state of the aircraft, we wish to construct a probability distribution of the aircraft debris to and then a search plan that can assist the search-and-rescue teams in allocation of their efforts. Since we fear that the plane have been crashed, we assume no signals can be received from the lost plane, and we ignore the possibility that no foul-play or navigation error could be the only cause for lost of contact with the aircraft.
+Concerns over the disappearance of flight MH370 have rekindled interests on how to devise an optimal search plan to maximize our chance at finding the debris of an aircraft lost in a vast open body of water. Given the last known state of the aircraft, we wish to construct a probability distribution of the aircraft debris to and then a search plan that can assist the search-and-rescue teams in allocation of their efforts. Since we fear that the plane has been crashed, we assume no signals can be received from the lost plane, and we ignore the possibility that foul-play or navigation error could be the only cause for lost of contact with the aircraft.
 
 The specific factors that should be taken into account in obtaining such optimal search plan
 include the variation in the type of crashed airplane and that of the search agents. Furthermore, we must first determine what constitutes the optimality of a search plan. Once the objective function is determined, the planning problem now turns into one of the optimization and we must
@@ -208,7 +213,9 @@ determine an efficient and robust way to compute the search plan.
 
 \item \textbf{Search Density}. The probability density function of search effort of a single search agent distributed across a 2D domain.
 
-\item \textbf{Search Effort}. A real number representing the total effort a single search agent applies.
+\item \textbf{Search Effort}. A real number representing the total effort a single search agent applies. It is also the cost function that we try to optimize against. It is derived from the 
+agent's velocity and effective sensor area.
+
 \item \textbf{(Detector) Range Law}. The probability density function of detection for a search agent on its observable area.
 %and so on
 
@@ -250,7 +257,7 @@ the last known state of the lost aircraft for an interval of 15 minutes to 1 hou
 \item \textbf{All agents are commanded and controlled by the central planner at each update interval.} No command and control overhead is assumed for the sake of simplicity.
 \item \textbf{Agents arrive at the boundary of the search domain at $t=0$}.  Search agents are assumed to have arrived on the edge of the search domain at $t=0$.
 \item \textbf{Unlimited bandwidth between search agent communications}.  This is necessary from a planning perspective as to ignore the less than pertinent issues with sensor fusion and coordination. Moreover, this factor is more than likely fixed by the hardware.
-\item \textbf{Search agents are assumed to be either helicopters, UAVs, and surface vessels, all equipped with a bi-variate Gaussian/ definite range law detection probability function.} Moreover, all types of agents are assumed to h Although the problem only mentions "search planes," Marine SAR vessels are very commonly used.
+\item \textbf{Search agents are assumed to be either helicopters, UAVs, and surface vessels, all equipped with a bi-variate Gaussian/definite range law detection probability function \cite{heli} \cite{vessel}.} Moreover, all types of agents are assumed to h Although the problem only mentions "search planes," Marine SAR vessels are very commonly used.
 \item \textbf{Search agents admit a detector range law of a bivariate Gaussian as a function of their type, altitude, and speed.} Most sensors used for marine SAR (e.g. magnetometer or camera) behaves roughly according to this distribution. Furthermore, the exact sensor range law varies greatly\footnote{We were not able to find good data on this subject} and we can always use actual measured data in operations. And finally, the detection statistics also follows Koopman's Random search formula \cite{46koopman}.
 \item \textbf{The agents all have null probability of false alarm.} According to \cite{83stone} and \cite{13kagan}, this assumption is a standard one employed by the SAR planning industry. It is an reasonable assumption in that usually false alarms for SAR can be resolved quickly and locally (i.e. reexamining the targets are usually an easy task).
 \item \textbf{The search agents have zero knowledge of local ocean/wind drift information.} Although modern planning softwares used by professional SAR entities (e.g. SAROPS by U.S. Coast Guards) all have existing database to accommodate real-time ocean drifting \cite{10uscg}, these data are often not precise, not to mention useless on our fictitious geography.
@@ -287,7 +294,7 @@ In \cite{13kagan}, Kagan and Ben-Gal exposited more recent progress on this old 
 
 %% The problem usually doesn't give you a very specific definition for what the ``best'' solution is, so you should clearly explain it.  Feel free to rename this section something more relevant or use a different style and structure for the paper, just make sure you fulfill the goal of defining what the ``best'' solution looks like.
 
-In real life, the only success criterion is whether we can find the target and how long it takes us to do so. However, from the standpoint of search plan optimization, what we want is \textbf{to maximize the likelihood of detection given a fixed search effort}. In symbols, given $k(\Omega,t)$ the search effort as our cost function, we want to maximize the Lagrangian $p(\Omega,t)\phi(\Omega,k(\Omega,t))-\lambda k(\Omega,t)$. Here $\Omega$ is our search domain as usual, $p$ the location density of our target, $\phi$ the probability of detection, $\lambda$ the Lagrange multiplier. From our assumptions, the Koopman Random-Search formula gives that $\phi(\Omega,k(\Omega,t)) = 1 - e^{-k(\Omega,t)}$.
+In real life, the only success criterion is whether we can find the target and how long it takes us to do so. However, from the standpoint of search plan optimization, what we want is \textbf{to maximize the likelihood of detection given a fixed search effort}. In symbols, given $k(t)$ the search effort as our cost function, we want to maximize the Lagrangian $p(\Omega,t)\phi(k(t))-\lambda k(t)$. Here $\Omega$ is our search domain as usual, $p$ the location density of our target, $\phi$ the probability of detection, $\lambda$ the Lagrange multiplier. From our assumptions, the Koopman Random-Search formula gives that $\phi(k(t)) = 1 - e^{-k(t)}$.
 
 %\newpage
 
@@ -332,33 +339,11 @@ Once we obtained the distribution of crash distances, we can calculate the locat
 
 Finally, the probability that the aircraft crashed within one cell is obtained through the double integral.
 
-\subsection{Location Density in Search Domain}\label{subsecDist:locd}
+\subsection{Search Agents and the Search Effort}\label{subsecDist:locd}
 
+The model for each of the three types of the agent is reduced to two parameters, agent speed and 1$\sigma$ detector range. From the range we can find the area such that we achieve a desired cumulative probability of detection (say 95\%) basing on the bi-variate Gaussian detector range law.
 
-Let us recall the deﬁnitions and notation which were applied in the search and screening
-methods (Section 2.1.1). Assume that the sample space X ={x1,x2,...,xn} represents a
-rectangular geographical domain of size (n1,n2), n = n1 × n2, and the points xi ∈ X, i =
-1, 2,...,n, represent the cells in which the target can be located at any time t = 0, 1, 2,....
-As indicated above, we index the points of X in a linear order such that for the Cartesian
-coordinates (j1,j2) of the point xi, its index is given by i = ((j1 − 1)n1 + j2), where
-j1 = 1,...,n1 and j2 = 1,...,n2.
-The target location probabilities at time t, t = 0, 1, 2,..., are denoted by pt(xi) =
-Pr{xt = xi}, i = 1, 2,...,n, where xt ∈ X denotes the target location at time t. As usual,
-we assume that 0 ≤ pt(xi) ≤ 1 and
-鬀n
-i=1 pt(xi) = 1. The target’s movement is governed
-by a discrete Markov process with transition probability matrix ρ ==ρij靀n×n, where ρij =
-Pr{xt+1 = xj|xt = xi} and 鷀jn=1 ρij = 1 for each i = 1,2,...,n.Ifmatrixρ is a unit
-matrix, then the target is static, otherwise we say that it is moving. Given target loca-
-tion probabilities pt(x), x ∈ X, at time t, location probabilities at the next time t + 1are
-calculated as pt+1(xi) = 鍰jn=1 ρij pt(xi), i = 1, 2,...,n.
-The searcher moves over the sample space and at each time t, t = 0, 1, 2,..., looks
-for a target by testing a neighboring observed area At ⊂ X of a certain radius r>0, which
-is deﬁned by using the metric of the considered geographical domain. Similar to the Singh
-and Krishnamurthy model (see Section 3.3.1), we do not restrict the size of the available
-observed areas, but assume that the areas have equal size and the trajectory of the searcher
-is continuous, as shown in Figure 2.7.
-
+Next the search effort can be calculated as $k(t) = |A|t=2rV$, where $r$ is the radius of the previously mentioned observable area, $V$ the speed of the agent, and $t$ the time steps. Using Koopman's random search formula (which is justified basing on our assumptions in \cite{83stone}), we get the probability of detection to be $\phi(t) = 1 - e^{2rV}$.
 
 
 \subsection{Comparison to U.S.C.G. SAROPS}\label{subsec:sarops}
@@ -376,8 +361,8 @@ is continuous, as shown in Figure 2.7.
 
 In comparison to the direct Monte Carlo / particle filter approach employed by the U.S. Coast Guards' SAROPS system, our search planning algorithm
 \begin{itemize}
-	\item \textbf{do not use multiple senarios.} due to problem statement; More see \ref{sec:assumptions}
-	\item \textbf{not using a particle filter.}
+	\item \textbf{Do not employ multiple scenarios.} SAROPS is capable of separate different scenarios of accident into independent draws. However, according to our assumptions and the problem statement, we are warranted to ignore unlikely cases (e.g. hijacking) See \ref{sec:assumptions}
+	\item \textbf{Do not use a particle filter.} SAROPS uses a particle filter to represent the probability density functions. Although more fashionable and advanced, it requires more computing power and is roughly equivalent to our representation given a fine enough grid resolution.
 \end{itemize}
 
 
@@ -445,8 +430,37 @@ By changing the type of lost plane, we can notice the difference in prior distri
 %%Here's how you input figures.  You can reference figures with \ref{}.
 %%If you don't care about captions or referencing, you only need the %%\includegraphics{} part.
 
+%The probability distribution map helps us identify the high probability density areas in the grid under consideration. We approach the search method by considering the instinctive approach of allocating available resources in accordance with the probability of search success. 
+%
+%For search problems, we designate each searching plane by its capacity to scan a certain area. For making things simple, we consider three most widely used search machines, each equipped with a magnetometer and a visual sensing devise. we consider the search plane approaching the target (debris, floating objects, etc) along a straight from a distance that exceeds the search range of the search plane. 
+%The lateral range function can thus be defined as its range at the point where it is closest to the target; this range can be considered as signed for the sake of simplicity. Negative sign implies that the target is to the left and positive implies the position to be on the right of the trajectory of the search plane.
+%
+%let f(r) = probability of detection when the distance of the search plane is r.
+%
+%f, here, is the lateral range function of the sensor. The area that the search plane encompasses is 
+%
+%
+%
+%Lets assume that the range of search of our plane is R. A would thus be 2R for definite range law. when considering the magnetometer, the distribution would look like a graph with a peak which signifies maximum probability at a specific point. 
+%
+%
+%We now move on to define the detection function
+%
+%we define the detection function as a function that relates search efforts to the probability of detecting the debris if it is in the area swiped. 
+%
+%Lets call b(j,T)= probability of detecting the target if the target is in cell M and T hours of search has been executed for j = 1,......J
+%
+%let p(j) = probability that the target is in cell j for j= 1,.......J.
+%summation of p(j) for j = 1,.....J would then be 1.
+%
+%The total probability of detecting the target would be the summation of the product of p(j)and b(j,t)   
+%
+%suppose that the sensor searches at speed v and has sweep width of W(j) in a particular cell j. Let the grid j have an area of A.
+%We follow the calculations and approach adopted by Koopman and approached the result that b(j,t) = 1 - exp(-Wvt/A)   for t greater than 0
 
+......
 
+We did not have enough time to reach desirable results.
 
 
 
@@ -457,7 +471,7 @@ By changing the type of lost plane, we can notice the difference in prior distri
 
 %% As a test for robustness, tweak some of the parameters to your model to see if the results would be substantially impacted.  You might also want to ask some additional sanity check questions based on the data and answer them.
 
-grid cell size changes cause varying levels of discretization error.
+By refining our search domain grid, we receive a varying level of discretization error as exemplified by the probability of aircraft escape given a uniform search plan. See Figure \ref{fig:NoSearchEscapeExplain} below.
 
 \begin{center}
 	\begin{figure}[H]
@@ -479,20 +493,19 @@ In Figure \ref{fig:NoSearchEscapeExplain}, it is evident that reduction in cell 
 
 \textit{Strengths:}
 \begin{itemize}
-\item \textbf{simple}.  Description.
+\item \textbf{Intuitive to understand}. 
 \item \textbf{Requires no input data for the ocean drift}. Saves lots of measurement and preparation time.
 \item \textbf{Can be transformed into desired terrain with ease}.  Conformal mapping.
-\item \textbf{Short bullet point}.  Description.
-\item \textbf{Short bullet point}.  Description.
+%\item \textbf{Short bullet point}.  Description.
+%\item \textbf{Short bullet point}.  Description.
 \end{itemize}
 \ \\
 \noindent \textit{Weaknesses:}
 \begin{itemize}
 \item \textbf{Require a fine grid resolution for realistic results}. Excessive discretization can cause unwanted error in total escape probability. See Section \ref{sec:sensitive} and Figure \ref{fig:NoSearchEscapeExplain}.
-\item \textbf{}.  Description.
 \item \textbf{very simplified drift modeling}.  Description.
-\item \textbf{Short bullet point}.  Description.
-\item \textbf{Short bullet point}.  Description.
+%\item \textbf{Short bullet point}.  Description.
+%\item \textbf{Short bullet point}.  Description.
 \end{itemize}
 
 
@@ -512,8 +525,8 @@ In Figure \ref{fig:NoSearchEscapeExplain}, it is evident that reduction in cell 
 %% A couple paragraphs summarizing everything, then big bullet points to finish:
 
 \begin{itemize}
-\item \textbf{Recommendation 1}.  Why the data says so.
-\item \textbf{Recommendation 2}.  Why the data says so.
+%\item \textbf{Optimize the search plan using }.  
+%\item \textbf{Recommendation 2}.  Why the data says so.
 \item \textbf{Need a more accessible database that can model airplane crash radius and ocean drifts.}.  Why the data says so.
 % Exact Number of recommendations isn't important
 \item \textbf{Make Sure to form a team of search agents that would not give up the search half way}. From our personal experience, we conclude that one person contributing is $\lll$ two person $\lll$ three person, etc.
@@ -568,7 +581,7 @@ In Figure \ref{fig:NoSearchEscapeExplain}, it is evident that reduction in cell 
 
 
 %%%Optional appendix suggestions:  (or you can print these out separately)
-%\newpage
+\newpage
 %\appendix
 %\appendixpage
 %\addappheadtotoc \setcounter{page}{1} \rhead{Appendix Page \thepage\
@@ -577,6 +590,10 @@ In Figure \ref{fig:NoSearchEscapeExplain}, it is evident that reduction in cell 
 \singlespacing
 \paragraph{main.m}:
 \lstinputlisting{./simulation/main.m}
+\paragraph{drift.m}:
+\lstinputlisting{./simulation/driftP.m}
+\paragraph{next.m}:
+\lstinputlisting{./simulation/next.m}
 
 
 \end{document}
