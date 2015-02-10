@@ -315,7 +315,7 @@ Our model can of course improve with a more detailed analysis of previous accide
 \begin{center}
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.9\linewidth]{simulation/CrashRadiusExplain.png}
+		\includegraphics[width=0.9\linewidth]{figures/CrashRadiusExplain.png}
 		\caption{Estimated Crash Radius Distribution of three types of missing aircraft. From left to right, the peaks represents the impact, free fall, others, and glide categories.}
 		\label{fig:CrashRadius}
 	\end{figure}
@@ -331,7 +331,7 @@ Once we obtained the distribution of crash distances, we can calculate the locat
 \begin{center}
 	\begin{figure}[H]
 		\centering
-		\adjincludegraphics[width=0.5\linewidth,trim={{.3\width} {.45\height} {.3\width} {.2\height}},clip]{simulation/LocationDensityExplain.png}
+		\adjincludegraphics[width=0.5\linewidth,trim={{.3\width} {.45\height} {.3\width} {.2\height}},clip]{figures/LocationDensityExplain.png}
 		\caption{Illustration of the accident-site geometry. The left {\large $\times$} represents the last known location, the right {\large $\times$} first checkpoint where the aircraft was not found. The incident site is marked by the red {\huge $\ast$}, while the crash site is marked by the black {\huge $\ast$}.}
 		\label{fig:geom}
 	\end{figure}
@@ -409,9 +409,9 @@ By changing the type of lost plane, we can notice the difference in prior distri
 \begin{center}
 	\begin{figure}[H]
 		\centering
-		 (a)\includegraphics[width=0.6\linewidth]{simulation/G280_PriorDistribution1.png}\\
-		 (b)\includegraphics[width=0.6\linewidth]{simulation/B737-900ER_PriorDistribution1.png}\\
-		 (c)\includegraphics[width=0.6\linewidth]{simulation/Airbus380_PriorDistribution1.png}
+		 (a)\includegraphics[width=0.6\linewidth]{figures/G280_PriorDistribution1.png}\\
+		 (b)\includegraphics[width=0.6\linewidth]{figures/B737-900ER_PriorDistribution1.png}\\
+		 (c)\includegraphics[width=0.6\linewidth]{figures/Airbus380_PriorDistribution1.png}
 		\caption{Prior Distributions. From top to bottom, (a) G280; (b) Boeing 737-900ER; (c) Airbus 380.}
 		\label{fig:prior}
 	\end{figure}
@@ -476,7 +476,7 @@ By refining our search domain grid, we receive a varying level of discretization
 \begin{center}
 	\begin{figure}[H]
 		\centering
-		\includegraphics[width=0.8\linewidth]{simulation/NoSearchEscapeExplain}
+		\includegraphics[width=0.8\linewidth]{figures/NoSearchEscapeExplain}
 		\caption{Decrease in grid cell resolution causes higher numerical leakage}
 		\label{fig:NoSearchEscapeExplain}
 	\end{figure}
@@ -589,13 +589,13 @@ In Figure \ref{fig:NoSearchEscapeExplain}, it is evident that reduction in cell 
 \subsection*{Appendix: Computer Code}
 \singlespacing
 \paragraph{main.m}:
-\lstinputlisting{./simulation/main.m}
+\lstinputlisting{./code/main.m}
 \paragraph{drift.m}:
-\lstinputlisting{./simulation/driftP.m}
+\lstinputlisting{./code/driftP.m}
 \paragraph{next.m}:
-\lstinputlisting{./simulation/next.m}
-
-
+\lstinputlisting{./code/next.m}
+\paragraph{Surface.m}:
+\lstinputlisting{./code/Surface.m}
 \end{document}
 
 

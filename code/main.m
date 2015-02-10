@@ -64,7 +64,7 @@ end
 
 % smoothed profile + visuialization
 [PR,R]=ksdensity(Rhist,[0:1e3:50e3 55e3:5e3:300e3 310e3:10e3:500e3]);
-save([acname '_CrashRadius.mat'],'R','PR');
+save(['../data/' acname '_CrashRadius.mat'],'R','PR');
 
 %% continuous probability at x=(x1,x2)
     rtil = linspace(0,rint,Nrtil);
@@ -104,8 +104,7 @@ save([acname '_CrashRadius.mat'],'R','PR');
     end
     %% renormalize and save data
     P = P / sum(P(:));
-    save(num2str([ACcase GRIDcase],'prior%d%d.mat'),'P','S');
-    % load(num2str([ACcase GRIDcase],'prior%d%d.mat'))
+    save(num2str([ACcase GRIDcase],'../data/prior%d%d.mat'),'P','S');
 
     %% crash probability distribution graph
 
@@ -117,7 +116,7 @@ save([acname '_CrashRadius.mat'],'R','PR');
     hold all;
     traj = plot3([-1e6 0 rint 1e6]/1e3, [0 0 0 0], [1 1 1 1],'rx--');
     set(traj,'linewidth',2,'markersize',15)
-    saveas(gcf,num2str(GRIDcase,[acname '_PriorDistribution%d.png']));
+    saveas(gcf,num2str(GRIDcase,['../figures/' acname '_PriorDistribution%d.png']));
 
 %% drift/diffusion simulation
     Tsim = 96*3600; %s
@@ -142,24 +141,24 @@ save([acname '_CrashRadius.mat'],'R','PR');
     for t = 1:Nsim
         [PP,qt(t+1)] = next(S,PP,Pmove);
     end
-    save(num2str([ACcase GRIDcase],'nosearchEsc%d%d.mat'),'tVec','qt');
+    save(num2str([ACcase GRIDcase],'../data/nosearchEsc%d%d.mat'),'tVec','qt');
     %% Location density if no search initiates
     figure(); hold all; grid on;
     plottwoform(Splot,PP,3); colorbar;
     xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
     title(num2str(Tsim/3600, 'Aircraft Debris Location Density at t=%d hr'));
-    saveas(gcf,num2str(GRIDcase,[acname '_NoSearchDistribution%d.png']));
+    saveas(gcf,num2str(GRIDcase,['../figures/' acname '_NoSearchDistribution%d.png']));
     %% Graph of escape probability over time
     figure(); hold all; grid on;
     plot(tVec,qt,'k-');
     xlabel('Time [hr]'); ylabel('Probability');
     title('Probability of Aircraft Debris Escaping the Search Domain');
-    saveas(gcf,num2str(GRIDcase,[acname '_NoSearchEscape%d.png']));
+    saveas(gcf,num2str(GRIDcase,['../figures/' acname '_NoSearchEscape%d.png']));
 %% Search Agent Data
 
-% given 99% detection range find sigma
+% assume 95% detection range as effective area
 ncdf = @(sig,Rd) normcdf(Rd,0,sig)-normcdf(-Rd,0,sig);
-cdf2sig = @(Rd) fminsearch(@(sig) abs(ncdf(sig,Rd)-.99),Rd/2);
+cdf2sig = @(Rd) fminsearch(@(sig) abs(ncdf(sig,Rd)-.95),Rd/2);
 
 % Marine Vessel (Damen SAR vessel 1816/1906 range= 600km+)
 MV.Vs = 15.5; %m/s
@@ -191,7 +190,7 @@ Nagent = 100;
 %     S.ynodes(S.getglobalboundarynodes)];
 
 % Detection Probability are assumed to be normal
-kd = mvncdf(x1r,x2r,xs,sig);
+A =  mvncdf(x1r,x2r,xs,sig);
 %% Distributed Search Plan (edge first and chase the highest cell)
     Tsim = 96*3600; %s
 
@@ -220,14 +219,14 @@ kd = mvncdf(x1r,x2r,xs,sig);
     plottwoform(Splot,PP,3); colorbar;
     xlabel('Tangent Direction [km]'); ylabel('Lateral Direction [km]');
     title(num2str(Tsim/3600, 'Aircraft Debris Location Density at t=%d hr'));
-    saveas(gcf,[acname '_NoSearchDistribution.png']);
+    saveas(gcf,['../figures/' acname '_NoSearchDistribution.png']);
     %% Graph of escape probability over time
     tVec = (0:dt:Tsim)/3600; %hr
     figure(); hold all; grid on;
     plot(tVec,qt,'k-');
     xlabel('Time [hr]'); ylabel('Probability');
     title('Probability of Aircraft Debris Escaping the Search Domain');
-    saveas(gcf,[acname '_NoSearchEscape.png']);
+    saveas(gcf,['../figures/' acname '_NoSearchEscape.png']);
 %% Distributed Search Plan (center first)
 
 

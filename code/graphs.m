@@ -19,7 +19,7 @@ plot(.47,.62,'k*','linewidth',2,'markersize',12);
 
 xlim([-1 2]); ylim([-1 1]);
 set(gca,'visible','off');
-saveas(gcf,'LocationDensityExplain.png')
+saveas(gcf,'../figures/LocationDensityExplain.png')
 %%
 data = dir('*CrashRadius.mat');
 data = {data.name};
@@ -33,7 +33,7 @@ plot(R/1e3,PR);
 legend('Airbus 380','B737-900ER','G280','location','best')
 xlim([0 300]); xlabel('Crash Radius [km]'); ylabel('Probability')
 title('Estimated Crash Radius Distribution')
-saveas(gcf,'CrashRadiusExplain.png');
+saveas(gcf,'../figures/CrashRadiusExplain.png');
 %%
 data = dir('nosearchEsc1*.mat');
 data = {data.name};
@@ -45,4 +45,4 @@ plot(tVec,qt);
 legend('20x15[km^2] Grid','5x5[km^2] Grid','location','northwest')
 ylim([0 1]); xlabel('Time [hr]'); ylabel('Probability')
 title('Probability of Aircraft Debris Escaping the Search Domain')
-saveas(gcf,'NoSearchEscapeExplain.png');
+saveas(gcf,'../figures/NoSearchEscapeExplain.png');
